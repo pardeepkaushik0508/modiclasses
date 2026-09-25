@@ -133,7 +133,7 @@ function IndianRailwaysTrainBanner() {
         <circle cx="178" cy="60" r="3.5" fill="#475569" stroke="#94a3b8" strokeWidth="1" />
         <circle cx="195" cy="60" r="3.5" fill="#475569" stroke="#94a3b8" strokeWidth="1" />
         <text x="50" y="42" fill="#0369a1" fontSize="9" fontWeight="bold" fontFamily="monospace">
-          WAP-7 &bull; IR
+          WAP-7 • IR
         </text>
       </svg>
     </div>
@@ -144,7 +144,8 @@ function IndianRailwaysTrainBanner() {
 export interface QuestionData {
   id: string;
   questionNo: number;
-  questionImageUrl: string | null;
+  questionImageUrl?: string | null;
+  imageUrl?: string | null;
   optionsJson: any; // [{ id: "A", label: "A", image?: string }]
   correctOption: string;
   marks: number;
@@ -178,6 +179,668 @@ interface RDSOExamRunnerClientProps {
 
 type PhaseState = "STUDY_PHASE" | "PHASE_TRANSITION" | "QUESTION_PHASE" | "RESULT_MODAL";
 
+// ==============================================================
+// HIGH-FIDELITY RDSO 12-FIGURE MEMORY STUDY CHART DIAGRAM (FALLBACK & NATIVE SVG)
+// ==============================================================
+export function RDSOMemoryChartDiagram({
+  className = "max-h-[500px] w-auto mx-auto object-contain",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 900 620"
+      className={className}
+      role="img"
+      aria-label="RDSO 12-Figure Memory Study Chart"
+    >
+      {/* Background Canvas */}
+      <rect width="900" height="620" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="4" rx="8" />
+
+      {/* Header Bar */}
+      <rect x="0" y="0" width="900" height="65" fill="#003366" rx="8" />
+      <text
+        x="450"
+        y="32"
+        fill="#ffffff"
+        fontSize="20"
+        fontWeight="bold"
+        fontFamily="sans-serif"
+        textAnchor="middle"
+      >
+        RDSO RAILWAY MEMORY CBT • SPATIAL ASSOCIATION CHART (सेट - 1)
+      </text>
+      <text
+        x="450"
+        y="52"
+        fill="#facc15"
+        fontSize="13"
+        fontWeight="bold"
+        fontFamily="sans-serif"
+        textAnchor="middle"
+      >
+        स्मरण पृष्ठ (Study Phase) • प्रत्येक आकृति और उसकी स्थिति (Position) को ध्यानपूर्वक याद रखें
+      </text>
+
+      {/* 12 Spatial Grid Cells (4 columns x 3 rows) */}
+
+      {/* ROW 1 */}
+      {/* Cell 1: Target */}
+      <g transform="translate(40, 90)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">1</text>
+        <circle cx="90" cy="85" r="38" fill="none" stroke="#dc2626" strokeWidth="3" />
+        <circle cx="90" cy="85" r="24" fill="#fecaca" stroke="#dc2626" strokeWidth="2" />
+        <circle cx="90" cy="85" r="10" fill="#991b1b" />
+      </g>
+
+      {/* Cell 2: Isometric Cube */}
+      <g transform="translate(250, 90)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">2</text>
+        <polygon points="90,45 130,65 90,85 50,65" fill="#bae6fd" stroke="#0284c7" strokeWidth="2.5" />
+        <polygon points="50,65 90,85 90,125 50,105" fill="#0284c7" stroke="#0369a1" strokeWidth="2.5" />
+        <polygon points="90,85 130,65 130,105 90,125" fill="#38bdf8" stroke="#0284c7" strokeWidth="2.5" />
+      </g>
+
+      {/* Cell 3: Star */}
+      <g transform="translate(460, 90)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">3</text>
+        <polygon points="90,42 99,68 126,68 104,84 113,110 90,94 67,110 76,84 54,68 81,68" fill="#facc15" stroke="#ca8a04" strokeWidth="2.5" />
+      </g>
+
+      {/* Cell 4: Hexagonal Clock */}
+      <g transform="translate(670, 90)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">4</text>
+        <polygon points="90,45 125,65 125,105 90,125 55,105 55,65" fill="#f1f5f9" stroke="#334155" strokeWidth="2.5" />
+        <circle cx="90" cy="85" r="4" fill="#dc2626" />
+        <line x1="90" y1="85" x2="90" y2="58" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" />
+        <line x1="90" y1="85" x2="112" y2="85" stroke="#0f172a" strokeWidth="3" strokeLinecap="round" />
+      </g>
+
+      {/* ROW 2 */}
+      {/* Cell 5: Crossed Compass */}
+      <g transform="translate(40, 260)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">5</text>
+        <circle cx="90" cy="85" r="35" stroke="#059669" strokeWidth="2" fill="none" />
+        <polygon points="90,52 97,78 90,72 83,78" fill="#dc2626" />
+        <polygon points="90,118 97,92 90,98 83,92" fill="#334155" />
+        <line x1="55" y1="85" x2="125" y2="85" stroke="#059669" strokeWidth="2" />
+      </g>
+
+      {/* Cell 6: Inverted Double Triangle */}
+      <g transform="translate(250, 260)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">6</text>
+        <polygon points="90,50 125,115 55,115" fill="#f8fafc" stroke="#4f46e5" strokeWidth="2.5" />
+        <polygon points="90,120 125,55 55,55" fill="#818cf8" fillOpacity="0.3" stroke="#4f46e5" strokeWidth="2" />
+      </g>
+
+      {/* Cell 7: Railway Semaphore Flag */}
+      <g transform="translate(460, 260)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">7</text>
+        <rect x="85" y="48" width="10" height="74" fill="#334155" rx="2" />
+        <polygon points="95,52 140,52 125,72 95,72" fill="#ef4444" stroke="#b91c1c" strokeWidth="2" />
+        <circle cx="90" cy="115" r="14" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
+      </g>
+
+      {/* Cell 8: Diamond Cross */}
+      <g transform="translate(670, 260)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">8</text>
+        <polygon points="90,45 130,85 90,125 50,85" fill="#fed7aa" stroke="#ea580c" strokeWidth="2.5" />
+        <line x1="90" y1="55" x2="90" y2="115" stroke="#9a3412" strokeWidth="3" />
+        <line x1="60" y1="85" x2="120" y2="85" stroke="#9a3412" strokeWidth="3" />
+      </g>
+
+      {/* ROW 3 */}
+      {/* Cell 9: Locomotive Wheel */}
+      <g transform="translate(40, 430)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">9</text>
+        <circle cx="90" cy="85" r="36" fill="#e2e8f0" stroke="#1e293b" strokeWidth="3" />
+        <circle cx="90" cy="85" r="16" fill="#64748b" />
+        <path d="M54 85 A36 36 0 0 1 126 85 Z" fill="#991b1b" />
+        <circle cx="90" cy="85" r="5" fill="#f8fafc" />
+      </g>
+
+      {/* Cell 10: Shield */}
+      <g transform="translate(250, 430)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">10</text>
+        <path d="M60 55 L120 55 C120 90 90 115 90 115 C90 115 60 90 60 55 Z" fill="#e0e7ff" stroke="#4338ca" strokeWidth="2.5" />
+        <circle cx="90" cy="80" r="10" fill="#f59e0b" />
+      </g>
+
+      {/* Cell 11: Triangular Prism */}
+      <g transform="translate(460, 430)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">11</text>
+        <polygon points="60,115 120,115 90,60" fill="#fef08a" stroke="#ca8a04" strokeWidth="2.5" />
+        <line x1="90" y1="60" x2="90" y2="115" stroke="#ca8a04" strokeWidth="2" />
+        <circle cx="90" cy="95" r="7" fill="#dc2626" />
+      </g>
+
+      {/* Cell 12: Concentric Octagon */}
+      <g transform="translate(670, 430)">
+        <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="28" cy="28" r="16" fill="#0284c7" />
+        <text x="28" y="34" fill="#ffffff" fontSize="14" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">12</text>
+        <polygon points="90,48 115,58 125,85 115,112 90,122 65,112 55,85 65,58" fill="#ecfdf5" stroke="#059669" strokeWidth="2.5" />
+        <polygon points="90,62 106,69 113,85 106,101 90,108 74,101 67,85 74,69" fill="#059669" />
+        <circle cx="90" cy="85" r="4" fill="#ffffff" />
+      </g>
+    </svg>
+  );
+}
+
+// ==============================================================
+// INLINE VECTOR FIGURES FOR RDSO QUESTION TARGET FIGURES
+// ==============================================================
+export function RDSOFigureShape({
+  figureIndex,
+  className = "w-full h-full object-contain",
+}: {
+  figureIndex: number;
+  className?: string;
+}) {
+  const idx = ((figureIndex - 1) % 12) + 1;
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 120 120"
+      className={className}
+      role="img"
+      aria-label={`RDSO Figure #${idx}`}
+    >
+      <rect width="120" height="120" fill="#ffffff" rx="8" stroke="#e2e8f0" strokeWidth="2" />
+      {idx === 1 && (
+        <>
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#dc2626" strokeWidth="3.5" />
+          <circle cx="60" cy="60" r="30" fill="#fecaca" stroke="#dc2626" strokeWidth="2.5" />
+          <circle cx="60" cy="60" r="14" fill="#991b1b" />
+        </>
+      )}
+      {idx === 2 && (
+        <>
+          <polygon points="60,18 102,39 60,60 18,39" fill="#bae6fd" stroke="#0284c7" strokeWidth="2.5" />
+          <polygon points="18,39 60,60 60,102 18,81" fill="#0284c7" stroke="#0369a1" strokeWidth="2.5" />
+          <polygon points="60,60 102,39 102,81 60,102" fill="#38bdf8" stroke="#0284c7" strokeWidth="2.5" />
+        </>
+      )}
+      {idx === 3 && (
+        <polygon
+          points="60,14 72,48 108,48 78,69 90,103 60,82 30,103 42,69 12,48 48,48"
+          fill="#facc15"
+          stroke="#ca8a04"
+          strokeWidth="3"
+        />
+      )}
+      {idx === 4 && (
+        <>
+          <polygon points="60,16 98,38 98,82 60,104 22,82 22,38" fill="#f1f5f9" stroke="#334155" strokeWidth="3" />
+          <circle cx="60" cy="60" r="5" fill="#dc2626" />
+          <line x1="60" y1="60" x2="60" y2="30" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
+          <line x1="60" y1="60" x2="86" y2="60" stroke="#0f172a" strokeWidth="3.5" strokeLinecap="round" />
+        </>
+      )}
+      {idx === 5 && (
+        <>
+          <circle cx="60" cy="60" r="44" stroke="#059669" strokeWidth="3" fill="none" />
+          <polygon points="60,20 68,52 60,45 52,52" fill="#dc2626" />
+          <polygon points="60,100 68,68 60,75 52,68" fill="#334155" />
+          <line x1="22" y1="60" x2="98" y2="60" stroke="#059669" strokeWidth="3" />
+        </>
+      )}
+      {idx === 6 && (
+        <>
+          <polygon points="60,20 102,96 18,96" fill="#f8fafc" stroke="#4f46e5" strokeWidth="3" />
+          <polygon points="60,100 102,24 18,24" fill="#818cf8" fillOpacity="0.35" stroke="#4f46e5" strokeWidth="2.5" />
+        </>
+      )}
+      {idx === 7 && (
+        <>
+          <rect x="54" y="16" width="12" height="88" fill="#334155" rx="3" />
+          <polygon points="66,22 114,22 98,46 66,46" fill="#ef4444" stroke="#b91c1c" strokeWidth="2" />
+          <circle cx="60" cy="94" r="16" fill="#facc15" stroke="#ca8a04" strokeWidth="2.5" />
+        </>
+      )}
+      {idx === 8 && (
+        <>
+          <polygon points="60,16 104,60 60,104 16,60" fill="#fed7aa" stroke="#ea580c" strokeWidth="3" />
+          <line x1="60" y1="28" x2="60" y2="92" stroke="#9a3412" strokeWidth="3.5" />
+          <line x1="28" y1="60" x2="92" y2="60" stroke="#9a3412" strokeWidth="3.5" />
+        </>
+      )}
+      {idx === 9 && (
+        <>
+          <circle cx="60" cy="60" r="44" fill="#e2e8f0" stroke="#1e293b" strokeWidth="3.5" />
+          <circle cx="60" cy="60" r="20" fill="#64748b" />
+          <path d="M16 60 A44 44 0 0 1 104 60 Z" fill="#991b1b" />
+          <circle cx="60" cy="60" r="6" fill="#f8fafc" />
+        </>
+      )}
+      {idx === 10 && (
+        <>
+          <path d="M26 24 L94 24 C94 66 60 98 60 98 C60 98 26 66 26 24 Z" fill="#e0e7ff" stroke="#4338ca" strokeWidth="3" />
+          <circle cx="60" cy="54" r="14" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+        </>
+      )}
+      {idx === 11 && (
+        <>
+          <polygon points="24,96 96,96 60,26" fill="#fef08a" stroke="#ca8a04" strokeWidth="3" />
+          <line x1="60" y1="26" x2="60" y2="96" stroke="#ca8a04" strokeWidth="2.5" />
+          <circle cx="60" cy="72" r="8" fill="#dc2626" />
+        </>
+      )}
+      {idx === 12 && (
+        <>
+          <polygon points="60,18 90,30 102,60 90,90 60,102 30,90 18,60 30,30" fill="#ecfdf5" stroke="#059669" strokeWidth="3" />
+          <polygon points="60,34 78,41 85,60 78,79 60,86 42,79 35,60 42,41" fill="#059669" />
+          <circle cx="60" cy="60" r="5" fill="#ffffff" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+// ==============================================================
+// INLINE VECTOR FIGURES FOR RDSO OPTION BOXES (A, B, C, D)
+// ==============================================================
+export function RDSOOptionShape({
+  questionNo,
+  optionId,
+  isCorrect,
+  className = "w-full h-full object-contain",
+}: {
+  questionNo: number;
+  optionId: string;
+  isCorrect: boolean;
+  className?: string;
+}) {
+  const q = ((questionNo - 1) % 12) + 1;
+
+  if (isCorrect) {
+    return <RDSOFigureShape figureIndex={q} className={className} />;
+  }
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 120 120"
+      className={className}
+      role="img"
+      aria-label={`Option ${optionId} figure`}
+    >
+      <rect width="120" height="120" fill="#ffffff" rx="8" stroke="#e2e8f0" strokeWidth="2" />
+      {q === 1 && (
+        <>
+          {optionId === "B" && (
+            <>
+              <circle cx="60" cy="60" r="42" fill="none" stroke="#dc2626" strokeWidth="3" />
+              <circle cx="60" cy="60" r="6" fill="#991b1b" />
+            </>
+          )}
+          {optionId === "C" && (
+            <>
+              <circle cx="60" cy="60" r="42" fill="none" stroke="#dc2626" strokeWidth="3" />
+              <circle cx="60" cy="60" r="22" fill="#fecaca" stroke="#dc2626" strokeWidth="2" />
+              <line x1="20" y1="60" x2="100" y2="60" stroke="#991b1b" strokeWidth="2" />
+              <line x1="60" y1="20" x2="60" y2="100" stroke="#991b1b" strokeWidth="2" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "A") && (
+            <>
+              <rect x="20" y="20" width="80" height="80" fill="none" stroke="#dc2626" strokeWidth="3" rx="4" />
+              <rect x="36" y="36" width="48" height="48" fill="#fecaca" stroke="#dc2626" strokeWidth="2" />
+              <rect x="52" y="52" width="16" height="16" fill="#991b1b" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 2 && (
+        <>
+          {optionId === "A" && (
+            <>
+              <rect x="25" y="25" width="70" height="70" fill="#bae6fd" stroke="#0284c7" strokeWidth="3" rx="4" />
+              <line x1="25" y1="25" x2="95" y2="95" stroke="#0284c7" strokeWidth="3" />
+            </>
+          )}
+          {optionId === "C" && (
+            <>
+              <polygon points="60,15 95,30 60,45 25,30" fill="#bae6fd" stroke="#0284c7" strokeWidth="2" />
+              <polygon points="25,30 60,45 60,105 25,90" fill="#0284c7" stroke="#0369a1" strokeWidth="2" />
+              <polygon points="60,45 95,30 95,90 60,105" fill="#38bdf8" stroke="#0284c7" strokeWidth="2" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "B") && (
+            <>
+              <polygon points="60,102 102,81 60,60 18,81" fill="#bae6fd" stroke="#0284c7" strokeWidth="2.5" />
+              <polygon points="18,81 60,60 60,18 18,39" fill="#0284c7" stroke="#0369a1" strokeWidth="2.5" />
+              <polygon points="60,60 102,81 102,39 60,18" fill="#38bdf8" stroke="#0284c7" strokeWidth="2.5" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 3 && (
+        <>
+          {optionId === "A" && (
+            <polygon points="60,15 72,48 105,60 72,72 60,105 48,72 15,60 48,48" fill="#facc15" stroke="#ca8a04" strokeWidth="3" />
+          )}
+          {optionId === "B" && (
+            <>
+              <polygon points="60,18 96,82 24,82" fill="#facc15" stroke="#ca8a04" strokeWidth="2.5" />
+              <polygon points="60,94 96,30 24,30" fill="#fef08a" stroke="#ca8a04" strokeWidth="2.5" fillOpacity="0.6" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "C") && (
+            <polygon points="60,15 70,42 97,33 88,60 115,70 88,80 97,107 70,98 60,125 50,98 23,107 32,80 5,70 32,60 23,33 50,42" fill="#facc15" stroke="#ca8a04" strokeWidth="2" />
+          )}
+        </>
+      )}
+
+      {q === 4 && (
+        <>
+          {optionId === "A" && (
+            <>
+              <polygon points="60,16 98,38 98,82 60,104 22,82 22,38" fill="#f1f5f9" stroke="#334155" strokeWidth="3" />
+              <circle cx="60" cy="60" r="5" fill="#dc2626" />
+              <line x1="60" y1="60" x2="60" y2="30" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="60" y1="60" x2="60" y2="86" stroke="#0f172a" strokeWidth="3.5" strokeLinecap="round" />
+            </>
+          )}
+          {optionId === "B" && (
+            <>
+              <polygon points="60,16 98,38 98,82 60,104 22,82 22,38" fill="#f1f5f9" stroke="#334155" strokeWidth="3" />
+              <circle cx="60" cy="60" r="5" fill="#dc2626" />
+              <line x1="60" y1="60" x2="60" y2="30" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="60" y1="60" x2="34" y2="60" stroke="#0f172a" strokeWidth="3.5" strokeLinecap="round" />
+            </>
+          )}
+          {(optionId === "C" || optionId === "D") && (
+            <>
+              <circle cx="60" cy="60" r="44" fill="#f1f5f9" stroke="#334155" strokeWidth="3" />
+              <circle cx="60" cy="60" r="5" fill="#dc2626" />
+              <line x1="60" y1="60" x2="60" y2="30" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="60" y1="60" x2="86" y2="60" stroke="#0f172a" strokeWidth="3.5" strokeLinecap="round" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 5 && (
+        <>
+          {optionId === "B" && (
+            <>
+              <circle cx="60" cy="60" r="44" stroke="#059669" strokeWidth="3" fill="none" />
+              <polygon points="60,100 68,68 60,75 52,68" fill="#334155" />
+              <line x1="22" y1="60" x2="98" y2="60" stroke="#059669" strokeWidth="3" />
+            </>
+          )}
+          {optionId === "C" && (
+            <>
+              <circle cx="60" cy="60" r="44" stroke="#059669" strokeWidth="3" fill="none" />
+              <polygon points="60,20 68,50 52,50" fill="#dc2626" />
+              <polygon points="60,100 68,70 52,70" fill="#334155" />
+              <polygon points="20,60 50,68 50,52" fill="#059669" />
+              <polygon points="100,60 70,68 70,52" fill="#059669" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "A") && (
+            <>
+              <circle cx="60" cy="30" r="10" stroke="#059669" strokeWidth="3" fill="none" />
+              <line x1="60" y1="40" x2="60" y2="95" stroke="#334155" strokeWidth="4" />
+              <path d="M26 80 Q60 108 94 80" stroke="#059669" strokeWidth="4" fill="none" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 6 && (
+        <>
+          {optionId === "A" && (
+            <polygon points="60,22 102,98 18,98" fill="#f8fafc" stroke="#4f46e5" strokeWidth="3" />
+          )}
+          {optionId === "C" && (
+            <>
+              <polygon points="40,30 70,85 10,85" fill="#f8fafc" stroke="#4f46e5" strokeWidth="2.5" />
+              <polygon points="80,30 110,85 50,85" fill="#818cf8" fillOpacity="0.35" stroke="#4f46e5" strokeWidth="2" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "B") && (
+            <>
+              <polygon points="60,18 104,98 16,98" fill="none" stroke="#4f46e5" strokeWidth="3" />
+              <polygon points="60,40 88,90 32,90" fill="none" stroke="#4f46e5" strokeWidth="2" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 7 && (
+        <>
+          {optionId === "A" && (
+            <>
+              <rect x="54" y="16" width="12" height="88" fill="#334155" rx="3" />
+              <polygon points="66,46 106,14 114,24 76,56" fill="#ef4444" stroke="#b91c1c" strokeWidth="2" />
+              <circle cx="60" cy="94" r="16" fill="#facc15" stroke="#ca8a04" strokeWidth="2.5" />
+            </>
+          )}
+          {optionId === "B" && (
+            <>
+              <rect x="54" y="16" width="12" height="88" fill="#334155" rx="3" />
+              <polygon points="66,30 106,62 98,72 66,40" fill="#ef4444" stroke="#b91c1c" strokeWidth="2" />
+              <circle cx="60" cy="94" r="16" fill="#facc15" stroke="#ca8a04" strokeWidth="2.5" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "C") && (
+            <>
+              <rect x="54" y="16" width="12" height="88" fill="#334155" rx="3" />
+              <polygon points="66,22 114,22 98,46 66,46" fill="#ef4444" stroke="#b91c1c" strokeWidth="2" />
+              <polygon points="54,22 6,22 22,46 54,46" fill="#ef4444" stroke="#b91c1c" strokeWidth="2" />
+              <circle cx="60" cy="94" r="16" fill="#facc15" stroke="#ca8a04" strokeWidth="2.5" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 8 && (
+        <>
+          {optionId === "A" && (
+            <polygon points="60,16 104,60 60,104 16,60" fill="#fed7aa" stroke="#ea580c" strokeWidth="3" />
+          )}
+          {optionId === "B" && (
+            <>
+              <polygon points="60,16 104,60 60,104 16,60" fill="#fed7aa" stroke="#ea580c" strokeWidth="3" />
+              <line x1="36" y1="36" x2="84" y2="84" stroke="#9a3412" strokeWidth="3.5" />
+              <line x1="84" y1="36" x2="36" y2="84" stroke="#9a3412" strokeWidth="3.5" />
+            </>
+          )}
+          {(optionId === "C" || optionId === "D") && (
+            <>
+              <rect x="24" y="24" width="72" height="72" fill="#fed7aa" stroke="#ea580c" strokeWidth="3" rx="4" />
+              <line x1="60" y1="24" x2="60" y2="96" stroke="#9a3412" strokeWidth="3.5" />
+              <line x1="24" y1="60" x2="96" y2="60" stroke="#9a3412" strokeWidth="3.5" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 9 && (
+        <>
+          {optionId === "B" && (
+            <>
+              <circle cx="60" cy="60" r="44" fill="#e2e8f0" stroke="#1e293b" strokeWidth="3.5" />
+              <circle cx="60" cy="60" r="20" fill="#64748b" />
+              <path d="M16 60 A44 44 0 0 0 104 60 Z" fill="#991b1b" />
+              <circle cx="60" cy="60" r="6" fill="#f8fafc" />
+            </>
+          )}
+          {optionId === "C" && (
+            <>
+              <circle cx="60" cy="60" r="44" fill="#e2e8f0" stroke="#1e293b" strokeWidth="3.5" />
+              <circle cx="60" cy="60" r="16" fill="#64748b" />
+              <line x1="16" y1="60" x2="104" y2="60" stroke="#1e293b" strokeWidth="2.5" />
+              <line x1="60" y1="16" x2="60" y2="104" stroke="#1e293b" strokeWidth="2.5" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "A") && (
+            <>
+              <circle cx="60" cy="60" r="38" fill="#e2e8f0" stroke="#1e293b" strokeWidth="3" />
+              <circle cx="60" cy="60" r="14" fill="#64748b" />
+              <rect x="55" y="12" width="10" height="96" fill="#1e293b" />
+              <rect x="12" y="55" width="96" height="10" fill="#1e293b" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 10 && (
+        <>
+          {optionId === "A" && (
+            <>
+              <polygon points="25,25 95,60 25,95" fill="#e0e7ff" stroke="#4338ca" strokeWidth="3" />
+              <circle cx="48" cy="60" r="10" fill="#f59e0b" />
+            </>
+          )}
+          {optionId === "C" && (
+            <>
+              <path d="M26 24 L94 24 C94 66 60 98 60 98 C60 98 26 66 26 24 Z" fill="#e0e7ff" stroke="#4338ca" strokeWidth="3" />
+              <line x1="26" y1="56" x2="94" y2="56" stroke="#4338ca" strokeWidth="2.5" />
+              <line x1="60" y1="24" x2="60" y2="98" stroke="#4338ca" strokeWidth="2.5" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "B") && (
+            <>
+              <circle cx="60" cy="60" r="42" fill="#e0e7ff" stroke="#4338ca" strokeWidth="3" />
+              <polygon points="60,32 67,52 88,52 71,64 78,84 60,72 42,84 49,64 32,52 53,52" fill="#f59e0b" />
+            </>
+          )}
+        </>
+      )}
+
+      {q === 11 && (
+        <>
+          {optionId === "A" && (
+            <polygon points="24,96 96,96 60,26" fill="#fef08a" stroke="#ca8a04" strokeWidth="3" />
+          )}
+          {optionId === "B" && (
+            <>
+              <polygon points="24,60 96,60 60,18" fill="#fef08a" stroke="#ca8a04" strokeWidth="3" />
+              <rect x="34" y="60" width="52" height="42" fill="#fef08a" stroke="#ca8a04" strokeWidth="3" />
+            </>
+          )}
+          {(optionId === "D" || optionId === "C") && (
+            <polygon points="36,26 84,26 102,96 18,96" fill="#fef08a" stroke="#ca8a04" strokeWidth="3" />
+          )}
+        </>
+      )}
+
+      {q === 12 && (
+        <>
+          {optionId === "A" && (
+            <>
+              <polygon points="60,20 95,40 95,80 60,100 25,80 25,40" fill="#ecfdf5" stroke="#059669" strokeWidth="3" />
+              <circle cx="60" cy="60" r="8" fill="#059669" />
+            </>
+          )}
+          {optionId === "B" && (
+            <polygon points="60,18 90,30 102,60 90,90 60,102 30,90 18,60 30,30" fill="#059669" stroke="#047857" strokeWidth="3" />
+          )}
+          {(optionId === "C" || optionId === "D") && (
+            <>
+              <polygon points="60,18 90,30 102,60 90,90 60,102 30,90 18,60 30,30" fill="#ecfdf5" stroke="#059669" strokeWidth="3" />
+              <line x1="60" y1="18" x2="60" y2="102" stroke="#059669" strokeWidth="2" />
+              <line x1="18" y1="60" x2="102" y2="60" stroke="#059669" strokeWidth="2" />
+            </>
+          )}
+        </>
+      )}
+    </svg>
+  );
+}
+
+// ==============================================================
+// QUESTION FIGURE RENDERER WITH AUTOMATIC VECTOR FALLBACK
+// ==============================================================
+export function QuestionFigureRenderer({
+  questionNo,
+  imageUrl,
+}: {
+  questionNo: number;
+  imageUrl?: string | null;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  if (imageUrl && !hasError) {
+    return (
+      <img
+        src={imageUrl}
+        alt={`Figure #${questionNo}`}
+        className="max-h-full max-w-full object-contain p-1"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return <RDSOFigureShape figureIndex={questionNo} className="w-full h-full object-contain p-1" />;
+}
+
+// ==============================================================
+// OPTION FIGURE RENDERER WITH AUTOMATIC VECTOR FALLBACK
+// ==============================================================
+export function OptionFigureRenderer({
+  questionNo,
+  optionId,
+  imageUrl,
+  correctOption,
+}: {
+  questionNo: number;
+  optionId: string;
+  imageUrl?: string | null;
+  correctOption?: string;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  if (imageUrl && !hasError) {
+    return (
+      <img
+        src={imageUrl}
+        alt={`Option ${optionId}`}
+        className="w-full h-full object-contain"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return (
+    <RDSOOptionShape
+      questionNo={questionNo}
+      optionId={optionId}
+      isCorrect={optionId === correctOption}
+      className="w-full h-full object-contain"
+    />
+  );
+}
+
 export default function RDSOExamRunnerClient({
   test,
   session,
@@ -202,9 +865,11 @@ export default function RDSOExamRunnerClient({
   );
 
   // Security: Study Image URL kept in state and destroyed completely on phase transition
-  const [studyImageUrl, setStudyImageUrl] = useState<string | null>(
-    studySection?.studyImageUrl || "/tests/memory/set-1-study-chart.png"
-  );
+  const initialStudyImage = studySection?.studyImageUrl && studySection.studyImageUrl.trim() !== ""
+    ? studySection.studyImageUrl.trim()
+    : null;
+  const [studyImageUrl, setStudyImageUrl] = useState<string | null>(initialStudyImage);
+  const [imageError, setImageError] = useState(false);
 
   // Transition countdown timer (3 seconds)
   const [transitionSeconds, setTransitionSeconds] = useState(3);
@@ -469,7 +1134,7 @@ export default function RDSOExamRunnerClient({
             <IndianRailwaysEmblem className="w-11 h-11 shrink-0 drop-shadow-xs" />
             <div className="flex flex-col">
               <span className="text-xs sm:text-sm font-extrabold text-[#003366] tracking-tight leading-none uppercase">
-                Five Education &bull; RDSO CBT Engine
+                Five Education • RDSO CBT Engine
               </span>
               <span className="text-[10px] text-slate-600 font-bold mt-1">
                 Indian Railways Aptitude Assessment System
@@ -483,7 +1148,7 @@ export default function RDSOExamRunnerClient({
               रेलवे भर्ती बोर्ड | RAILWAY RECRUITMENT BOARD
             </h1>
             <p className="text-[11px] font-bold text-slate-700">
-              सी ई एन आर आर बी - 01/2024 &bull; CEN RRB - 01/2024
+              सी ई एन आर आर बी - 01/2024 • CEN RRB - 01/2024
             </p>
             <p className="text-[10px] font-semibold text-rose-700">
               RRB ALP Aptitude Test
@@ -685,7 +1350,7 @@ export default function RDSOExamRunnerClient({
             <h2 className="text-sm sm:text-base font-bold tracking-tight">
               {phaseState === "STUDY_PHASE"
                 ? "स्मरण पृष्ठ (Study Phase) - आकृतियों को ध्यानपूर्वक याद रखें"
-                : `${test.title} &bull; उत्तर पृष्ठ (Question Recall Phase)`}
+                : `${test.title} • उत्तर पृष्ठ (Question Recall Phase)`}
             </h2>
           </div>
           <div className="flex items-center gap-4 text-xs font-medium text-sky-100">
@@ -716,16 +1381,19 @@ export default function RDSOExamRunnerClient({
               </span>
             </div>
 
-            {/* Single Page High-Resolution Memory Study Image */}
-            {studyImageUrl && (
-              <div className="w-full flex items-center justify-center p-2 sm:p-4 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden min-h-[460px]">
+            {/* Single Page High-Resolution Memory Study Image with High-Fidelity SVG Fallback */}
+            <div className="w-full flex items-center justify-center p-2 sm:p-4 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden min-h-[460px]">
+              {studyImageUrl && !imageError ? (
                 <img
                   src={studyImageUrl}
                   alt="RDSO Memory Study Chart"
-                  className="max-h-[620px] w-auto max-w-full object-contain drop-shadow"
+                  className="max-h-[500px] w-auto mx-auto object-contain"
+                  onError={() => setImageError(true)}
                 />
-              </div>
-            )}
+              ) : (
+                <RDSOMemoryChartDiagram className="max-h-[500px] w-auto mx-auto object-contain" />
+              )}
+            </div>
           </div>
         )}
 
@@ -779,18 +1447,33 @@ export default function RDSOExamRunnerClient({
                 const selected = answers[question.id];
 
                 // Parse options from optionsJson
-                let options: { id: string; label: string; image?: string }[] = [];
+                let options: { id: string; label: string; image?: string; imageUrl?: string }[] = [];
                 if (Array.isArray(question.optionsJson)) {
                   options = question.optionsJson;
+                } else if (typeof question.optionsJson === "string") {
+                  try {
+                    options = JSON.parse(question.optionsJson);
+                  } catch {
+                    options = [
+                      { id: "A", label: "A" },
+                      { id: "B", label: "B" },
+                      { id: "C", label: "C" },
+                      { id: "D", label: "D" },
+                    ];
+                  }
                 } else {
                   options = [
                     { id: "A", label: "A" },
                     { id: "B", label: "B" },
                     { id: "C", label: "C" },
                     { id: "D", label: "D" },
-                    { id: "E", label: "E" },
                   ];
                 }
+
+                const targetImageUrl =
+                  question.questionImageUrl ||
+                  question.imageUrl ||
+                  `/tests/memory/q-${question.questionNo}-target.png`;
 
                 return (
                   <div
@@ -822,21 +1505,11 @@ export default function RDSOExamRunnerClient({
 
                     {/* Question Target Graphic */}
                     <div className="flex flex-col sm:flex-row items-center gap-6 py-2">
-                      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-2 shrink-0">
-                        {question.questionImageUrl ? (
-                          <img
-                            src={question.questionImageUrl}
-                            alt={`Question ${question.questionNo}`}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center text-slate-400">
-                            <span className="font-mono font-bold text-xl text-[#0284c7]">
-                              Fig #{question.questionNo}
-                            </span>
-                            <span className="text-[10px]">Target</span>
-                          </div>
-                        )}
+                      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-2 shrink-0 shadow-2xs">
+                        <QuestionFigureRenderer
+                          questionNo={question.questionNo}
+                          imageUrl={targetImageUrl}
+                        />
                       </div>
 
                       {/* Options Grid:
@@ -845,24 +1518,29 @@ export default function RDSOExamRunnerClient({
                           ONLY the circular radio dot must fill/select.
                           DO NOT highlight or tint the entire option box or question row in blue.
                       */}
-                      <div className="flex-1 grid grid-cols-2 sm:grid-cols-5 gap-3 w-full">
+                      <div className="flex-1 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 w-full">
                         {options.map((opt) => {
                           const isSelected = selected === opt.id;
+                          const optImage =
+                            opt.image ||
+                            opt.imageUrl ||
+                            `/tests/memory/q-${question.questionNo}-opt-${opt.id}.png`;
 
                           return (
                             <label
                               key={opt.id}
                               onClick={() => handleSelectOption(question.id, opt.id)}
-                              className="border border-slate-300 rounded-lg p-3 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-slate-50 transition-colors bg-white select-none"
+                              className="border border-slate-300 rounded-lg p-2.5 sm:p-3 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-slate-50 transition-colors bg-white select-none shadow-2xs hover:border-slate-400"
                             >
-                              {/* Option Image (if available) */}
-                              {opt.image && (
-                                <img
-                                  src={opt.image}
-                                  alt={`Option ${opt.id}`}
-                                  className="w-12 h-12 object-contain"
+                              {/* Option Image with Vector SVG Fallback */}
+                              <div className="w-14 h-14 flex items-center justify-center bg-slate-50 rounded border border-slate-200 p-1">
+                                <OptionFigureRenderer
+                                  questionNo={question.questionNo}
+                                  optionId={opt.id}
+                                  imageUrl={optImage}
+                                  correctOption={question.correctOption}
                                 />
-                              )}
+                              </div>
 
                               {/* Option Letter */}
                               <span className="font-bold text-xs text-slate-800">
@@ -1058,7 +1736,7 @@ export default function RDSOExamRunnerClient({
               <IndianRailwaysEmblem className="w-12 h-12" />
               <div className="text-left">
                 <h3 className="font-black text-slate-900 text-base leading-tight">
-                  रेलवे भर्ती बोर्ड &bull; RAILWAY RECRUITMENT BOARD
+                  रेलवे भर्ती बोर्ड • RAILWAY RECRUITMENT BOARD
                 </h3>
                 <p className="text-xs text-[#003366] font-bold">
                   RDSO Psycho Aptitude CBT Assessment Scorecard

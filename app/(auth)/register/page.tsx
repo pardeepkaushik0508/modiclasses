@@ -362,7 +362,7 @@ export default function RegisterPage() {
       </div>
 
       <footer className="mt-8 text-center text-xs text-slate-500 space-y-1">
-        <p>&copy; {new Date().getFullYear()} Five Education &bull; RDSO Railway Psycho CBT Engine</p>
+        <p>&copy; {new Date().getFullYear()} Five Education • RDSO Railway Psycho CBT Engine</p>
         <p>Aptitude Batteries for Indian Railways RRB Assistant Loco Pilot & Station Master</p>
       </footer>
     </div>

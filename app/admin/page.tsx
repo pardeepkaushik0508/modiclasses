@@ -99,7 +99,7 @@ export default async function AdminDashboardPage() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100/70 text-blue-800 border border-blue-200">
               <ShieldCheck className="w-4 h-4 text-blue-600" />
-              <span>RBAC Engine Guard Active &bull; Role: ADMIN</span>
+              <span>RBAC Engine Guard Active • Role: ADMIN</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Five Education LMS Administrator Console
@@ -191,7 +191,7 @@ export default async function AdminDashboardPage() {
                   <div className="space-y-0.5 max-w-[70%]">
                     <div className="font-bold text-slate-900 text-xs line-clamp-1">{c.title}</div>
                     <div className="text-[11px] text-slate-500">
-                      ₹{c.discountedPrice ?? c.price} &bull; {c.validityDays} Days Validity
+                      ₹{c.discountedPrice ?? c.price} • {c.validityDays} Days Validity
                     </div>
                   </div>
 
@@ -243,7 +243,7 @@ export default async function AdminDashboardPage() {
                       <span className="text-blue-600 font-mono font-semibold">
                         {t.batteryType}
                       </span>
-                      <span>&bull;</span>
+                      <span>•</span>
                       <span>{t.totalDurationSeconds}s</span>
                     </div>
                   </div>

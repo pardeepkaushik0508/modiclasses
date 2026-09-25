@@ -5,10 +5,10 @@
   <!-- Header Bar -->
   <rect x="0" y="0" width="900" height="65" fill="#003366" rx="8" />
   <text x="450" y="32" fill="#ffffff" font-size="20" font-weight="bold" font-family="sans-serif" text-anchor="middle">
-    RDSO RAILWAY MEMORY CBT &bull; SPATIAL ASSOCIATION CHART (सेट - 1)
+    RDSO RAILWAY MEMORY CBT &#8226; SPATIAL ASSOCIATION CHART (सेट - 1)
   </text>
   <text x="450" y="52" fill="#facc15" font-size="13" font-weight="bold" font-family="sans-serif" text-anchor="middle">
-    स्मरण पृष्ठ (Study Phase) &bull; प्रत्येक आकृति और उसकी स्थिति (Position) को ध्यानपूर्वक याद रखें
+    स्मरण पृष्ठ (Study Phase) &#8226; प्रत्येक आकृति और उसकी स्थिति (Position) को ध्यानपूर्वक याद रखें
   </text>
 
   <!-- 12 Spatial Grid Cells (4 columns x 3 rows) -->

@@ -280,7 +280,7 @@ export default function LoginPage() {
       </Suspense>
 
       <footer className="mt-8 text-center text-xs text-slate-500 space-y-1">
-        <p>&copy; {new Date().getFullYear()} Five Education &bull; RDSO Railway Psycho CBT Engine</p>
+        <p>&copy; {new Date().getFullYear()} Five Education • RDSO Railway Psycho CBT Engine</p>
         <p>RRB ALP, Station Master & Aptitude Battery Preparation</p>
       </footer>
     </div>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
   Home as HomeIcon,
   FileText,
@@ -192,20 +192,62 @@ export default function DashboardClient({
   progressPercentage,
   completedCount,
   totalTestsCount,
-  session,
+  session: initialSession,
 }: DashboardClientProps) {
+  const { data: clientSession, status } = useSession();
+
+  // Seamless session state across SSR and Client hydration without mismatch:
+  // - If client is authenticated, use clientSession
+  // - If status is loading, fall back to initialSession passed from SSR
+  // - If unauthenticated, session is null
+  const activeSession =
+    status === "authenticated"
+      ? clientSession
+      : status === "unauthenticated"
+      ? null
+      : initialSession;
+
+  const currentUser = activeSession?.user;
+  const isAuthenticated =
+    status === "authenticated"
+      ? true
+      : status === "unauthenticated"
+      ? false
+      : !!initialSession?.user;
+
   const [activeNav, setActiveNav] = useState("Home");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    }
+    if (isProfileOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileOpen]);
 
   // Accessible Modal States
   const [referModalOpen, setReferModalOpen] = useState(false);
   const [closeGroupModalOpen, setCloseGroupModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
-  const candidateName = session?.user?.name || "Rajiv";
-  const referralLink = `https://fiveeducation.in/register?ref=${session?.user?.rollNo || "RAJIV420"}`;
+  // Dynamic user details - completely removed dummy fallback
+  const candidateName = currentUser?.name || "Candidate";
+  const userEmail = currentUser?.email || "";
+  const userInitials = (currentUser?.name ? currentUser.name.trim().charAt(0) : "U").toUpperCase();
+  const referralLink = currentUser?.rollNo
+    ? `https://fiveeducation.in/register?ref=${currentUser.rollNo}`
+    : "https://fiveeducation.in/register";
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(referralLink);
@@ -379,7 +421,8 @@ export default function DashboardClient({
             {/* Navigation Group 3: Account links */}
             <div className="pt-2 border-t border-slate-800/70 space-y-1">
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard" : "/login?callbackUrl=/dashboard"}
+                onClick={() => setSidebarOpen(false)}
                 className="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all"
               >
                 <GraduationCap className="w-4 h-4 shrink-0 text-slate-400" />
@@ -387,7 +430,8 @@ export default function DashboardClient({
               </Link>
 
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard/profile" : "/login?callbackUrl=/dashboard"}
+                onClick={() => setSidebarOpen(false)}
                 className="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all"
               >
                 <User className="w-4 h-4 shrink-0 text-slate-400" />
@@ -395,14 +439,15 @@ export default function DashboardClient({
               </Link>
 
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard/settings" : "/login?callbackUrl=/dashboard"}
+                onClick={() => setSidebarOpen(false)}
                 className="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all"
               >
                 <Settings className="w-4 h-4 shrink-0 text-slate-400" />
                 <span>Settings</span>
               </Link>
 
-              {session ? (
+              {isAuthenticated ? (
                 <button
                   onClick={() => signOut({ callbackUrl: "/login" })}
                   className="w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-rose-400 hover:bg-slate-800/80 hover:text-rose-300 transition-all text-left cursor-pointer"
@@ -413,6 +458,7 @@ export default function DashboardClient({
               ) : (
                 <Link
                   href="/login"
+                  onClick={() => setSidebarOpen(false)}
                   className="flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold text-sky-400 hover:bg-slate-800/80 hover:text-sky-300 transition-all"
                 >
                   <LogOut className="w-4 h-4 shrink-0" />
@@ -496,78 +542,107 @@ export default function DashboardClient({
                 </div>
               </div>
 
-              {/* Top-Right: Notification Bell & Rajiv Profile */}
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <button className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer">
-                    <Bell className="w-5 h-5" />
-                  </button>
-                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white" />
-                </div>
-
-                <div className="relative">
-                  <button
-                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="flex items-center gap-2.5 p-1 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-[#0b192e] text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                      {candidateName.charAt(0).toUpperCase()}
+              {/* Top-Right: Notification Bell & Profile / Auth Actions */}
+              <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
+                {isAuthenticated ? (
+                  <>
+                    <div className="relative">
+                      <button
+                        title="Notifications"
+                        className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
+                      >
+                        <Bell className="w-5 h-5" />
+                      </button>
+                      <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white" />
                     </div>
-                    <span className="hidden sm:inline text-xs font-bold text-slate-800">
-                      {candidateName}
-                    </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                  </button>
 
-                  {isProfileOpen && (
-                    <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white border border-slate-200 shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-                      <div className="px-4 py-2 border-b border-slate-100">
-                        <p className="text-xs font-bold text-slate-900">{candidateName}</p>
-                        <p className="text-[11px] text-slate-500 truncate">
-                          {session?.user?.email || "rajiv.candidate@fiveeducation.in"}
-                        </p>
-                      </div>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="block px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
+                    <div className="relative" ref={profileRef}>
+                      <button
+                        onClick={() => setIsProfileOpen(!isProfileOpen)}
+                        className="flex items-center gap-2 p-1 sm:px-2 sm:py-1 rounded-full sm:rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200"
+                        aria-expanded={isProfileOpen}
+                        aria-haspopup="true"
                       >
-                        My Course
-                      </Link>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="block px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="block px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
-                      >
-                        Settings
-                      </Link>
-                      <div className="border-t border-slate-100 my-1" />
-                      {session ? (
-                        <button
-                          onClick={() => signOut({ callbackUrl: "/login" })}
-                          className="w-full text-left px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 font-medium cursor-pointer"
-                        >
-                          Logout
-                        </button>
-                      ) : (
-                        <Link
-                          href="/login"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="block px-4 py-2 text-xs text-blue-600 hover:bg-blue-50 font-semibold"
-                        >
-                          Sign In / Register
-                        </Link>
+                        <div className="w-8 h-8 rounded-full bg-[#0b192e] text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-blue-500/20">
+                          {userInitials}
+                        </div>
+                        <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[120px] truncate">
+                          {candidateName}
+                        </span>
+                        <ChevronDown
+                          className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+                            isProfileOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+
+                      {isProfileOpen && (
+                        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+                          <div className="px-4 py-2.5 border-b border-slate-100">
+                            <p className="text-xs font-bold text-slate-900 truncate">
+                              {candidateName}
+                            </p>
+                            {userEmail && (
+                              <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                                {userEmail}
+                              </p>
+                            )}
+                          </div>
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                          >
+                            <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
+                            <span>My Course</span>
+                          </Link>
+                          <Link
+                            href="/dashboard/profile"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                          >
+                            <User className="w-3.5 h-3.5 text-slate-400" />
+                            <span>Profile</span>
+                          </Link>
+                          <Link
+                            href="/dashboard/settings"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                          >
+                            <Settings className="w-3.5 h-3.5 text-slate-400" />
+                            <span>Settings</span>
+                          </Link>
+                          <div className="border-t border-slate-100 my-1" />
+                          <button
+                            onClick={() => {
+                              setIsProfileOpen(false);
+                              signOut({ callbackUrl: "/login" });
+                            }}
+                            className="w-full flex items-center gap-2.5 text-left px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                          >
+                            <LogOut className="w-3.5 h-3.5" />
+                            <span>Logout</span>
+                          </button>
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-2 sm:gap-2.5">
+                    <Link
+                      href="/login"
+                      className="px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-900 border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 transition-all shadow-xs"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/register"
+                      className="px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-lg text-xs font-bold text-white bg-[#1d4ed8] hover:bg-blue-700 transition-all shadow-xs"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </header>
@@ -585,7 +660,7 @@ export default function DashboardClient({
                     Welcome to <span className="text-[#1d4ed8]">Five Education</span>
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                    Your Preparation &bull; Our Support &bull; Your Success
+                    Your Preparation • Our Support • Your Success
                   </p>
                 </div>
 
@@ -865,7 +940,7 @@ export default function DashboardClient({
                       <BarChart2 className="w-4 h-4 text-[#1d4ed8]" />
                       <h3 className="text-sm font-extrabold text-slate-900">My Progress</h3>
                     </div>
-                    {session && (
+                    {isAuthenticated && (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">
                         {completedCount} / {totalTestsCount} Completed
                       </span>
