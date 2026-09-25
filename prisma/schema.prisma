@@ -1,0 +1,240 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum PhaseType {
+  STUDY_PHASE
+  QUESTION_PHASE
+}
+
+enum BatteryType {
+  MEMORY_FIGURE
+  MEMORY_BUILDING
+  CLOCK
+  BRICK
+  ROW_COLUMN
+  SAME_FIGURE
+  OCTAGONAL
+  SIMILARITY
+  YES_NO
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  TIMED_OUT
+}
+
+// ==========================================
+// MODELS
+// ==========================================
+
+model User {
+  id           String        @id @default(cuid())
+  name         String?
+  email        String        @unique
+  phone        String?       @unique
+  passwordHash String
+  role         Role          @default(STUDENT)
+  rollNo       String?       @unique
+  avatarUrl    String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  orders       Order[]
+  attempts     TestAttempt[]
+
+  @@map("users")
+}
+
+model Course {
+  id              String          @id @default(cuid())
+  title           String
+  slug            String          @unique
+  description     String?         @db.Text
+  price           Float
+  discountedPrice Float?
+  validityDays    Int             @default(365)
+  isPublished     Boolean         @default(false)
+  thumbnail       String?
+  features        String[]        @default([])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  modules         CourseModule[]
+  studyMaterials  StudyMaterial[]
+  orders          Order[]
+  tests           Test[]
+
+  @@map("courses")
+}
+
+model CourseModule {
+  id        String   @id @default(cuid())
+  courseId  String
+  title     String
+  order     Int
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@map("course_modules")
+}
+
+model StudyMaterial {
+  id        String   @id @default(cuid())
+  courseId  String
+  title     String
+  fileUrl   String
+  fileType  String   // e.g., 'PDF' | 'VIDEO'
+  isFree    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@map("study_materials")
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  userId         String
+  courseId       String
+  gatewayOrderId String?
+  amount         Float
+  status         OrderStatus @default(PENDING)
+  createdAt      DateTime    @default(now())
+
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([courseId])
+  @@map("orders")
+}
+
+model Test {
+  id                   String        @id @default(cuid())
+  courseId             String?
+  title                String
+  slug                 String        @unique
+  batteryType          BatteryType
+  totalDurationSeconds Int
+  passingScore         Float         @default(42.0)
+  isPublished          Boolean       @default(false)
+  createdAt            DateTime      @default(now())
+
+  course               Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  sections             TestSection[]
+  attempts             TestAttempt[]
+
+  @@index([courseId])
+  @@index([batteryType])
+  @@map("tests")
+}
+
+model TestSection {
+  id              String      @id @default(cuid())
+  testId          String
+  title           String
+  phaseType       PhaseType
+  durationSeconds Int
+  order           Int
+  instructions    String?     @db.Text
+  studyImageUrl   String?
+  createdAt       DateTime    @default(now())
+
+  test            Test        @relation(fields: [testId], references: [id], onDelete: Cascade)
+  questions       Question[]
+
+  @@index([testId])
+  @@map("test_sections")
+}
+
+model Question {
+  id               String         @id @default(cuid())
+  sectionId        String
+  questionNo       Int
+  questionImageUrl String?
+  optionsJson      Json           // e.g. [{"id":"A","label":"A","value":"..."},...]
+  correctOption    String         // e.g. "A", "B", "C", "D", "E"
+  marks            Float          @default(1.0)
+  negativeMarks    Float          @default(0.0)
+
+  section          TestSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  responses        UserResponse[]
+
+  @@index([sectionId])
+  @@map("questions")
+}
+
+model TestAttempt {
+  id          String        @id @default(cuid())
+  userId      String
+  testId      String
+  startedAt   DateTime      @default(now())
+  completedAt DateTime?
+  status      AttemptStatus @default(IN_PROGRESS)
+  rawScore    Float?
+  tScore      Float?
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test        Test          @relation(fields: [testId], references: [id], onDelete: Cascade)
+  responses   UserResponse[]
+
+  @@index([userId])
+  @@index([testId])
+  @@map("test_attempts")
+}
+
+model UserResponse {
+  id               String       @id @default(cuid())
+  attemptId        String
+  questionId       String
+  selectedOption   String?
+  isCorrect        Boolean?
+  timeSpentSeconds Int          @default(0)
+
+  attempt          TestAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question         Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@index([questionId])
+  @@map("user_responses")
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String
+  category  String   // 'TEST' | 'VIDEO' | 'MATERIAL' | 'GROUP'
+  dateText  String   // e.g. '12 Apr 2025'
+  createdAt DateTime @default(now())
+
+  @@map("announcements")
+}
+

@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="100%" height="100%">
+  <!-- Background Canvas -->
+  <rect width="900" height="620" fill="#f8fafc" stroke="#cbd5e1" stroke-width="4" rx="8" />
+  
+  <!-- Header Bar -->
+  <rect x="0" y="0" width="900" height="65" fill="#003366" rx="8" />
+  <text x="450" y="32" fill="#ffffff" font-size="20" font-weight="bold" font-family="sans-serif" text-anchor="middle">
+    RDSO RAILWAY MEMORY CBT &bull; SPATIAL ASSOCIATION CHART (सेट - 1)
+  </text>
+  <text x="450" y="52" fill="#facc15" font-size="13" font-weight="bold" font-family="sans-serif" text-anchor="middle">
+    स्मरण पृष्ठ (Study Phase) &bull; प्रत्येक आकृति और उसकी स्थिति (Position) को ध्यानपूर्वक याद रखें
+  </text>
+
+  <!-- 12 Spatial Grid Cells (4 columns x 3 rows) -->
+  
+  <!-- ROW 1 -->
+  <!-- Cell 1 -->
+  <g transform="translate(40, 90)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">1</text>
+    <!-- Figure: Concentric Target -->
+    <circle cx="90" cy="85" r="38" fill="none" stroke="#dc2626" stroke-width="3" />
+    <circle cx="90" cy="85" r="24" fill="#fecaca" stroke="#dc2626" stroke-width="2" />
+    <circle cx="90" cy="85" r="10" fill="#991b1b" />
+  </g>
+
+  <!-- Cell 2 -->
+  <g transform="translate(250, 90)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">2</text>
+    <!-- Figure: Isometric Cube / Building -->
+    <polygon points="90,45 130,65 90,85 50,65" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5" />
+    <polygon points="50,65 90,85 90,125 50,105" fill="#0284c7" stroke="#0369a1" stroke-width="2.5" />
+    <polygon points="90,85 130,65 130,105 90,125" fill="#38bdf8" stroke="#0284c7" stroke-width="2.5" />
+  </g>
+
+  <!-- Cell 3 -->
+  <g transform="translate(460, 90)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">3</text>
+    <!-- Figure: Five-Point Star -->
+    <polygon points="90,42 99,68 126,68 104,84 113,110 90,94 67,110 76,84 54,68 81,68" fill="#facc15" stroke="#ca8a04" stroke-width="2.5" />
+  </g>
+
+  <!-- Cell 4 -->
+  <g transform="translate(670, 90)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">4</text>
+    <!-- Figure: Hexagonal Clock Dial -->
+    <polygon points="90,45 125,65 125,105 90,125 55,105 55,65" fill="#f1f5f9" stroke="#334155" stroke-width="2.5" />
+    <circle cx="90" cy="85" r="4" fill="#dc2626" />
+    <line x1="90" y1="85" x2="90" y2="58" stroke="#dc2626" stroke-width="3" stroke-linecap="round" />
+    <line x1="90" y1="85" x2="112" y2="85" stroke="#0f172a" stroke-width="3" stroke-linecap="round" />
+  </g>
+
+  <!-- ROW 2 -->
+  <!-- Cell 5 -->
+  <g transform="translate(40, 260)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">5</text>
+    <!-- Figure: Crossed Anchors / Compass -->
+    <circle cx="90" cy="85" r="35" stroke="#059669" stroke-width="2" fill="none" />
+    <polygon points="90,52 97,78 90,72 83,78" fill="#dc2626" />
+    <polygon points="90,118 97,92 90,98 83,92" fill="#334155" />
+    <line x1="55" y1="85" x2="125" y2="85" stroke="#059669" stroke-width="2" />
+  </g>
+
+  <!-- Cell 6 -->
+  <g transform="translate(250, 260)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">6</text>
+    <!-- Figure: Inverted Double Triangle -->
+    <polygon points="90,50 125,115 55,115" fill="#f8fafc" stroke="#4f46e5" stroke-width="2.5" />
+    <polygon points="90,120 125,55 55,55" fill="#818cf8" fill-opacity="0.3" stroke="#4f46e5" stroke-width="2" />
+  </g>
+
+  <!-- Cell 7 -->
+  <g transform="translate(460, 260)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">7</text>
+    <!-- Figure: Railway Signal Flag / Semaphore -->
+    <rect x="85" y="48" width="10" height="74" fill="#334155" rx="2" />
+    <polygon points="95,52 140,52 125,72 95,72" fill="#ef4444" stroke="#b91c1c" stroke-width="2" />
+    <circle cx="90" cy="115" r="14" fill="#facc15" stroke="#ca8a04" stroke-width="2" />
+  </g>
+
+  <!-- Cell 8 -->
+  <g transform="translate(670, 260)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">8</text>
+    <!-- Figure: Diamond with Embedded Cross -->
+    <polygon points="90,45 130,85 90,125 50,85" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5" />
+    <line x1="90" y1="55" x2="90" y2="115" stroke="#9a3412" stroke-width="3" />
+    <line x1="60" y1="85" x2="120" y2="85" stroke="#9a3412" stroke-width="3" />
+  </g>
+
+  <!-- ROW 3 -->
+  <!-- Cell 9 -->
+  <g transform="translate(40, 430)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">9</text>
+    <!-- Figure: Railway Engine Wheel with Counterweight -->
+    <circle cx="90" cy="85" r="36" fill="#e2e8f0" stroke="#1e293b" stroke-width="3" />
+    <circle cx="90" cy="85" r="16" fill="#64748b" />
+    <path d="M54 85 A36 36 0 0 1 126 85 Z" fill="#991b1b" />
+    <circle cx="90" cy="85" r="5" fill="#f8fafc" />
+  </g>
+
+  <!-- Cell 10 -->
+  <g transform="translate(250, 430)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">10</text>
+    <!-- Figure: Shield with Crown -->
+    <path d="M60 55 L120 55 C120 90 90 115 90 115 C90 115 60 90 60 55 Z" fill="#e0e7ff" stroke="#4338ca" stroke-width="2.5" />
+    <circle cx="90" cy="80" r="10" fill="#f59e0b" />
+  </g>
+
+  <!-- Cell 11 -->
+  <g transform="translate(460, 430)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">11</text>
+    <!-- Figure: Triangular Prism Structure -->
+    <polygon points="60,115 120,115 90,60" fill="#fef08a" stroke="#ca8a04" stroke-width="2.5" />
+    <line x1="90" y1="60" x2="90" y2="115" stroke="#ca8a04" stroke-width="2" />
+    <circle cx="90" cy="95" r="7" fill="#dc2626" />
+  </g>
+
+  <!-- Cell 12 -->
+  <g transform="translate(670, 430)">
+    <rect width="180" height="150" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="28" cy="28" r="16" fill="#0284c7" />
+    <text x="28" y="34" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">12</text>
+    <!-- Figure: Concentric Octagon -->
+    <polygon points="90,48 115,58 125,85 115,112 90,122 65,112 55,85 65,58" fill="#ecfdf5" stroke="#059669" stroke-width="2.5" />
+    <polygon points="90,62 106,69 113,85 106,101 90,108 74,101 67,85 74,69" fill="#059669" />
+    <circle cx="90" cy="85" r="4" fill="#ffffff" />
+  </g>
+</svg>

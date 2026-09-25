@@ -1,0 +1,122 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  /* Shadcn UI Default Palette */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 201 96% 32%; /* RDSO Primary Blue: #0284c7 */
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 201 96% 32%;
+  --radius: 0.5rem;
+
+  /* RDSO Test Engine Tokens */
+  --rdso-blue-primary: #0284c7;
+  --rdso-blue-dark: #0369a1;
+  --rdso-header-gray: #e2e8f0;
+  --rdso-canvas-bg: #f8fafc;
+  --rdso-border-gray: #cbd5e1;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 201 96% 40%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 201 96% 40%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: var(--rdso-canvas-bg);
+  color: hsl(var(--foreground));
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ========================================================
+   RDSO CBT TEST ENGINE SECURITY & EXAM ENVIRONMENT STYLES
+   ======================================================== */
+
+/* Disables text selection across the test engine viewport to prevent cheating & copy-paste */
+.test-secure,
+.no-select {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Disables image dragging for psycho battery test diagrams */
+.no-drag {
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  pointer-events: auto;
+}
+
+/* RDSO Canvas & Container Tokens */
+.rdso-header-bar {
+  background-color: var(--rdso-header-gray);
+  border-bottom: 2px solid var(--rdso-border-gray);
+}
+
+.rdso-canvas {
+  background-color: var(--rdso-canvas-bg);
+}
+
+.rdso-primary-btn {
+  background-color: var(--rdso-blue-primary);
+  color: #ffffff;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.rdso-primary-btn:hover {
+  background-color: var(--rdso-blue-dark);
+}
+
+/* Psycho Battery Aspect Ratio Containers */
+.aspect-rdso-figure {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-rdso-brick {
+  aspect-ratio: 3 / 2;
+}
+
+.aspect-rdso-cbt {
+  aspect-ratio: 4 / 3;
+}
