@@ -57,10 +57,27 @@ export default function MaterialsClient({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successToast, setSuccessToast] = useState<string | null>(null);
+  const [emptyMediaModal, setEmptyMediaModal] = useState<{ open: boolean; title: string }>({
+    open: false,
+    title: "",
+  });
 
   const showToast = (msg: string) => {
     setSuccessToast(msg);
     setTimeout(() => setSuccessToast(null), 3500);
+  };
+
+  const handleOpenMedia = (e: React.MouseEvent, m: MaterialItem) => {
+    e.preventDefault();
+    if (!m.fileUrl || m.fileUrl.trim() === "" || m.fileUrl === "#") {
+      setEmptyMediaModal({
+        open: true,
+        title: m.title,
+      });
+      showToast("Media Not Available: Is video ya document ka koi link/file upload nahi kiya gaya hai.");
+      return;
+    }
+    window.open(m.fileUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,7 +187,7 @@ export default function MaterialsClient({
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer hover:scale-[1.02]"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer hover:scale-[1.02]"
         >
           <Plus className="w-4 h-4" />
           <span>Upload Study Material</span>
@@ -181,13 +198,13 @@ export default function MaterialsClient({
       <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-xs">
               <tr>
                 <th className="py-3.5 px-4">Title & Document</th>
                 <th className="py-3.5 px-4">Linked Course</th>
                 <th className="py-3.5 px-4">Format</th>
-                <th className="py-3.5 px-4">Access</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+                <th className="py-3.5 px-4 whitespace-nowrap">Access</th>
+                <th className="py-3.5 px-4 text-right whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -213,7 +230,7 @@ export default function MaterialsClient({
                         <div>
                           <div className="font-bold text-slate-900 text-xs">{m.title}</div>
                           <div className="text-[10px] text-slate-400 font-mono line-clamp-1 max-w-xs mt-0.5">
-                            {m.fileUrl}
+                            {m.fileUrl || "(No URL Provided)"}
                           </div>
                         </div>
                       </div>
@@ -229,9 +246,9 @@ export default function MaterialsClient({
                       </span>
                     </td>
 
-                    <td className="py-4 px-4">
+                    <td className="py-4 px-4 whitespace-nowrap">
                       <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        className={`inline-flex items-center whitespace-nowrap px-2.5 py-1 text-xs font-semibold rounded-full ${
                           m.isFree
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                             : "bg-blue-50 text-blue-700 border border-blue-200"
@@ -241,17 +258,16 @@ export default function MaterialsClient({
                       </span>
                     </td>
 
-                    <td className="py-4 px-4 text-right">
+                    <td className="py-4 px-4 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-2">
-                        <a
-                          href={m.fileUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-600 transition-colors"
-                          title="Open File"
+                        <button
+                          type="button"
+                          onClick={(e) => handleOpenMedia(e, m)}
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 text-slate-600 transition-colors cursor-pointer"
+                          title="Open File / View Media"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+                        </button>
                         <button
                           onClick={() => handleDelete(m.id, m.title)}
                           className="p-1.5 rounded-lg bg-slate-100 hover:bg-rose-600 hover:text-white text-rose-600 transition-colors cursor-pointer"
@@ -392,12 +408,40 @@ export default function MaterialsClient({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? "Uploading..." : "Save Material"}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Empty Media Alert Modal */}
+      {emptyMediaModal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl p-6 text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mx-auto">
+              <AlertCircle className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="font-extrabold text-slate-900 text-base">Media Not Available</h3>
+              <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                Is video ya document ka koi link/file upload nahi kiya gaya hai.
+              </p>
+              {emptyMediaModal.title && (
+                <p className="text-[11px] font-semibold text-slate-400 truncate mt-1">
+                  Material: {emptyMediaModal.title}
+                </p>
+              )}
+            </div>
+            <button
+              onClick={() => setEmptyMediaModal({ open: false, title: "" })}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#003366] hover:bg-[#0284c7] text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
+            >
+              Theek Hai / Understood
+            </button>
           </div>
         </div>
       )}

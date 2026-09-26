@@ -32,6 +32,7 @@ import {
   CheckCircle2,
   Share2,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import type { Session } from "next-auth";
 
@@ -177,9 +178,20 @@ interface AnnouncementItem {
   dateText: string;
 }
 
+export interface DashboardNotificationItem {
+  id: string;
+  type: "COURSE" | "TEST" | "MATERIAL" | "ANNOUNCEMENT";
+  title: string;
+  message: string;
+  link: string;
+  createdAt: string;
+  formattedDate: string;
+}
+
 interface DashboardClientProps {
   courses: CourseItem[];
   announcements: AnnouncementItem[];
+  notifications?: DashboardNotificationItem[];
   progressPercentage: number;
   completedCount: number;
   totalTestsCount: number;
@@ -189,6 +201,7 @@ interface DashboardClientProps {
 export default function DashboardClient({
   courses,
   announcements,
+  notifications = [],
   progressPercentage,
   completedCount,
   totalTestsCount,
@@ -204,22 +217,83 @@ export default function DashboardClient({
     status === "authenticated"
       ? clientSession
       : status === "unauthenticated"
-      ? null
-      : initialSession;
+        ? null
+        : initialSession;
 
   const currentUser = activeSession?.user;
   const isAuthenticated =
     status === "authenticated"
       ? true
       : status === "unauthenticated"
-      ? false
-      : !!initialSession?.user;
+        ? false
+        : !!initialSession?.user;
 
   const [activeNav, setActiveNav] = useState("Home");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Notification State
+  const [notifList, setNotifList] = useState<DashboardNotificationItem[]>(notifications || []);
+  const [readNotifIds, setReadNotifIds] = useState<Set<string>>(new Set());
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (notifications && notifications.length > 0) {
+      setNotifList(notifications);
+    }
+  }, [notifications]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("five_edu_read_notifs");
+      if (stored) {
+        setReadNotifIds(new Set(JSON.parse(stored)));
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
+
+  // Close notifications dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setIsNotifOpen(false);
+      }
+    }
+    if (isNotifOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isNotifOpen]);
+
+  const unreadCount = notifList.filter((n) => !readNotifIds.has(n.id)).length;
+
+  const handleMarkAllRead = () => {
+    const allIds = new Set(notifList.map((n) => n.id));
+    setReadNotifIds(allIds);
+    try {
+      localStorage.setItem("five_edu_read_notifs", JSON.stringify(Array.from(allIds)));
+    } catch {
+      // Ignore
+    }
+  };
+
+  const handleReadItem = (id: string) => {
+    const next = new Set(readNotifIds);
+    next.add(id);
+    setReadNotifIds(next);
+    try {
+      localStorage.setItem("five_edu_read_notifs", JSON.stringify(Array.from(next)));
+    } catch {
+      // Ignore
+    }
+  };
 
   // Close profile dropdown on outside click
   useEffect(() => {
@@ -267,9 +341,8 @@ export default function DashboardClient({
             1. PERSISTENT DARK BLUE LEFT SIDEBAR (#0b192e / #0f172a)
            ======================================================== */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0b192e] text-slate-300 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } shadow-2xl lg:shadow-none lg:static`}
+          className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0b192e] text-slate-300 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } shadow-2xl lg:shadow-none lg:static`}
         >
           <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
             {/* Logo & Mobile Close */}
@@ -301,11 +374,10 @@ export default function DashboardClient({
                   setActiveNav("Home");
                   setSidebarOpen(false);
                 }}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeNav === "Home"
-                    ? "bg-[#1d4ed8] text-white shadow-md font-bold"
-                    : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-                }`}
+                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${activeNav === "Home"
+                  ? "bg-[#1d4ed8] text-white shadow-md font-bold"
+                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                  }`}
               >
                 <HomeIcon className="w-4 h-4 shrink-0" />
                 <span>Home</span>
@@ -317,11 +389,10 @@ export default function DashboardClient({
                   setActiveNav("Test");
                   setSidebarOpen(false);
                 }}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeNav === "Test"
-                    ? "bg-[#1d4ed8] text-white shadow-md font-bold"
-                    : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-                }`}
+                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${activeNav === "Test"
+                  ? "bg-[#1d4ed8] text-white shadow-md font-bold"
+                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                  }`}
               >
                 <FileText className="w-4 h-4 shrink-0" />
                 <span>Test</span>
@@ -333,11 +404,10 @@ export default function DashboardClient({
                   setActiveNav("Video");
                   setSidebarOpen(false);
                 }}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeNav === "Video"
-                    ? "bg-[#1d4ed8] text-white shadow-md font-bold"
-                    : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-                }`}
+                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${activeNav === "Video"
+                  ? "bg-[#1d4ed8] text-white shadow-md font-bold"
+                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                  }`}
               >
                 <Video className="w-4 h-4 shrink-0" />
                 <span>Video</span>
@@ -349,11 +419,10 @@ export default function DashboardClient({
                   setActiveNav("Study Material");
                   setSidebarOpen(false);
                 }}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeNav === "Study Material"
-                    ? "bg-[#1d4ed8] text-white shadow-md font-bold"
-                    : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-                }`}
+                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${activeNav === "Study Material"
+                  ? "bg-[#1d4ed8] text-white shadow-md font-bold"
+                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                  }`}
               >
                 <BookOpen className="w-4 h-4 shrink-0" />
                 <span>Study Material</span>
@@ -365,11 +434,10 @@ export default function DashboardClient({
                   setActiveNav("Groups");
                   setSidebarOpen(false);
                 }}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeNav === "Groups"
-                    ? "bg-[#1d4ed8] text-white shadow-md font-bold"
-                    : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-                }`}
+                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all ${activeNav === "Groups"
+                  ? "bg-[#1d4ed8] text-white shadow-md font-bold"
+                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                  }`}
               >
                 <Users className="w-4 h-4 shrink-0" />
                 <span>Groups</span>
@@ -526,8 +594,8 @@ export default function DashboardClient({
                 </div>
               </div>
 
-              {/* Middle Search Bar */}
-              <div className="flex-1 max-w-xl mx-2 sm:mx-6">
+              {/* Middle Search Bar: Desktop Centered (Hidden on Mobile) */}
+              <div className="hidden md:flex flex-1 max-w-xl mx-2 sm:mx-6">
                 <div className="relative w-full">
                   <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
                     <Search className="w-4 h-4" />
@@ -543,90 +611,178 @@ export default function DashboardClient({
               </div>
 
               {/* Top-Right: Notification Bell & Profile / Auth Actions */}
-              <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
-                {isAuthenticated ? (
-                  <>
-                    <div className="relative">
-                      <button
-                        title="Notifications"
-                        className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
-                      >
-                        <Bell className="w-5 h-5" />
-                      </button>
-                      <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white" />
-                    </div>
+              <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                {/* Functional Notification Bell Dropdown */}
+                <div className="relative" ref={notifRef}>
+                  <button
+                    onClick={() => setIsNotifOpen(!isNotifOpen)}
+                    title="Notifications"
+                    className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer relative"
+                    aria-label="View notifications"
+                    aria-expanded={isNotifOpen}
+                  >
+                    <Bell className="w-5 h-5" />
+                    {unreadCount > 0 && (
+                      <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white animate-pulse" />
+                    )}
+                  </button>
 
-                    <div className="relative" ref={profileRef}>
-                      <button
-                        onClick={() => setIsProfileOpen(!isProfileOpen)}
-                        className="flex items-center gap-2 p-1 sm:px-2 sm:py-1 rounded-full sm:rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200"
-                        aria-expanded={isProfileOpen}
-                        aria-haspopup="true"
-                      >
-                        <div className="w-8 h-8 rounded-full bg-[#0b192e] text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-blue-500/20">
-                          {userInitials}
+                  {/* Interactive Notification Dropdown Panel */}
+                  {isNotifOpen && (
+                    <div className="absolute right-0 mt-2 w-74 sm:w-96 rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100">
+                      <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/90">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-extrabold text-slate-900 text-xs sm:text-sm">Latest Activity & Updates</h3>
+                          {unreadCount > 0 && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] shrink-0 font-extrabold bg-rose-100 text-rose-700 border border-rose-200">
+                              {unreadCount} New
+                            </span>
+                          )}
                         </div>
-                        <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[120px] truncate">
-                          {candidateName}
-                        </span>
-                        <ChevronDown
-                          className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-                            isProfileOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-
-                      {isProfileOpen && (
-                        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-                          <div className="px-4 py-2.5 border-b border-slate-100">
-                            <p className="text-xs font-bold text-slate-900 truncate">
-                              {candidateName}
-                            </p>
-                            {userEmail && (
-                              <p className="text-[11px] text-slate-500 truncate mt-0.5">
-                                {userEmail}
-                              </p>
-                            )}
-                          </div>
-                          <Link
-                            href="/dashboard"
-                            onClick={() => setIsProfileOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
-                          >
-                            <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
-                            <span>My Course</span>
-                          </Link>
-                          <Link
-                            href="/dashboard/profile"
-                            onClick={() => setIsProfileOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
-                          >
-                            <User className="w-3.5 h-3.5 text-slate-400" />
-                            <span>Profile</span>
-                          </Link>
-                          <Link
-                            href="/dashboard/settings"
-                            onClick={() => setIsProfileOpen(false)}
-                            className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
-                          >
-                            <Settings className="w-3.5 h-3.5 text-slate-400" />
-                            <span>Settings</span>
-                          </Link>
-                          <div className="border-t border-slate-100 my-1" />
+                        {unreadCount > 0 && (
                           <button
-                            onClick={() => {
-                              setIsProfileOpen(false);
-                              signOut({ callbackUrl: "/login" });
-                            }}
-                            className="w-full flex items-center gap-2.5 text-left px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                            onClick={handleMarkAllRead}
+                            className="text-[11px] font-bold text-[#1d4ed8] hover:text-blue-800 hover:underline cursor-pointer"
                           >
-                            <LogOut className="w-3.5 h-3.5" />
-                            <span>Logout</span>
+                            Mark all as read
                           </button>
-                        </div>
-                      )}
+                        )}
+                      </div>
+
+                      <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                        {notifList.length === 0 ? (
+                          <div className="p-8 text-center text-slate-400">
+                            <Bell className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                            <p className="text-xs font-semibold text-slate-600">No new notifications</p>
+                            <p className="text-[11px] text-slate-400 mt-0.5">You are all caught up with latest courses & tests.</p>
+                          </div>
+                        ) : (
+                          notifList.map((notif) => {
+                            const isRead = readNotifIds.has(notif.id);
+                            const badgeIcon =
+                              notif.type === "COURSE" ? (
+                                <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
+                                  <BookOpen className="w-4 h-4" />
+                                </div>
+                              ) : notif.type === "TEST" ? (
+                                <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0">
+                                  <Target className="w-4 h-4" />
+                                </div>
+                              ) : notif.type === "MATERIAL" ? (
+                                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0">
+                                  <FileText className="w-4 h-4" />
+                                </div>
+                              ) : (
+                                <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center shrink-0">
+                                  <Sparkles className="w-4 h-4" />
+                                </div>
+                              );
+
+                            return (
+                              <Link
+                                key={notif.id}
+                                href={notif.link || "/"}
+                                onClick={() => {
+                                  handleReadItem(notif.id);
+                                  setIsNotifOpen(false);
+                                }}
+                                className={`p-3.5 flex items-start gap-3 hover:bg-slate-50 transition-colors block ${isRead ? "opacity-75 bg-white" : "bg-blue-50/20"
+                                  }`}
+                              >
+                                {badgeIcon}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <p className="text-xs font-bold text-slate-900 truncate">{notif.title}</p>
+                                    {!isRead && (
+                                      <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                                    )}
+                                  </div>
+                                  <p className="text-[11px] text-slate-600 line-clamp-2 mt-0.5 leading-snug">
+                                    {notif.message}
+                                  </p>
+                                  <span className="text-[10px] text-slate-400 font-medium mt-1 inline-block">
+                                    {notif.formattedDate}
+                                  </span>
+                                </div>
+                              </Link>
+                            );
+                          })
+                        )}
+                      </div>
                     </div>
-                  </>
+                  )}
+                </div>
+
+                {isAuthenticated ? (
+                  <div className="relative" ref={profileRef}>
+                    <button
+                      onClick={() => setIsProfileOpen(!isProfileOpen)}
+                      className="flex items-center gap-2 p-1 sm:px-2 sm:py-1 rounded-full sm:rounded-lg hover:bg-slate-100 transition-colors cursor-pointer border border-transparent hover:border-slate-200"
+                      aria-expanded={isProfileOpen}
+                      aria-haspopup="true"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-[#0b192e] text-white flex items-center justify-center font-bold text-xs shadow-xs ring-2 ring-blue-500/20">
+                        {userInitials}
+                      </div>
+                      <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[120px] truncate">
+                        {candidateName}
+                      </span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isProfileOpen ? "rotate-180" : ""
+                          }`}
+                      />
+                    </button>
+
+                    {isProfileOpen && (
+                      <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-slate-200 shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+                        <div className="px-4 py-2.5 border-b border-slate-100">
+                          <p className="text-xs font-bold text-slate-900 truncate">
+                            {candidateName}
+                          </p>
+                          {userEmail && (
+                            <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                              {userEmail}
+                            </p>
+                          )}
+                        </div>
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                        >
+                          <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
+                          <span>My Course</span>
+                        </Link>
+                        <Link
+                          href="/dashboard/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                        >
+                          <User className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Profile</span>
+                        </Link>
+                        <Link
+                          href="/dashboard/settings"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                        >
+                          <Settings className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Settings</span>
+                        </Link>
+                        <div className="border-t border-slate-100 my-1" />
+                        <button
+                          onClick={() => {
+                            setIsProfileOpen(false);
+                            signOut({ callbackUrl: "/login" });
+                          }}
+                          className="w-full flex items-center gap-2.5 text-left px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-3.5 h-3.5" />
+                          <span>Logout</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <div className="flex items-center gap-2 sm:gap-2.5">
                     <Link
@@ -643,6 +799,22 @@ export default function DashboardClient({
                     </Link>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Mobile Second Row: Separate Full-Width Search Input (< md) */}
+            <div className="block md:hidden w-full mt-2.5 pt-1 pb-0.5">
+              <div className="relative w-full">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+                  <Search className="w-4 h-4" />
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for courses, tests, videos, study material..."
+                  className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50/90 focus:bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1d4ed8]/30 focus:border-[#1d4ed8] transition-all"
+                />
               </div>
             </div>
           </header>
@@ -671,11 +843,10 @@ export default function DashboardClient({
                     return (
                       <div
                         key={course.id}
-                        className={`rounded-2xl border p-5 text-white shadow-sm flex flex-col justify-between relative overflow-hidden ${
-                          isCourse1
-                            ? "bg-gradient-to-br from-[#0c2340] via-[#0f172a] to-[#0284c7]/20 border-slate-800"
-                            : "bg-gradient-to-br from-[#064e3b] via-[#022c22] to-[#047857]/20 border-emerald-900/60"
-                        }`}
+                        className={`rounded-2xl border p-5 text-white shadow-sm flex flex-col justify-between relative overflow-hidden ${isCourse1
+                          ? "bg-gradient-to-br from-[#0c2340] via-[#0f172a] to-[#0284c7]/20 border-slate-800"
+                          : "bg-gradient-to-br from-[#064e3b] via-[#022c22] to-[#047857]/20 border-emerald-900/60"
+                          }`}
                       >
                         <div className="space-y-3 z-10">
                           <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-[#facc15] text-slate-900 uppercase tracking-wide">
@@ -782,24 +953,22 @@ export default function DashboardClient({
                       return (
                         <div
                           key={course.id}
-                          className={`rounded-2xl border p-5 shadow-2xs flex flex-col justify-between ${
-                            isBlueTheme
-                              ? "bg-[#f0f7ff] border-blue-200/80"
-                              : isGreenTheme
+                          className={`rounded-2xl border p-5 shadow-2xs flex flex-col justify-between ${isBlueTheme
+                            ? "bg-[#f0f7ff] border-blue-200/80"
+                            : isGreenTheme
                               ? "bg-[#f0fdf4] border-emerald-200/80"
                               : "bg-[#fdf4ff] border-purple-200/80"
-                          }`}
+                            }`}
                         >
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
                               <span
-                                className={`inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold text-white ${
-                                  isBlueTheme
-                                    ? "bg-[#1d4ed8]"
-                                    : isGreenTheme
+                                className={`inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold text-white ${isBlueTheme
+                                  ? "bg-[#1d4ed8]"
+                                  : isGreenTheme
                                     ? "bg-[#059669]"
                                     : "bg-purple-700"
-                                }`}
+                                  }`}
                               >
                                 Course {cIdx + 1}
                               </span>
@@ -824,13 +993,12 @@ export default function DashboardClient({
                               {course.features.map((feat, fIdx) => (
                                 <li key={fIdx} className="flex items-center gap-2">
                                   <Check
-                                    className={`w-3.5 h-3.5 stroke-[3] ${
-                                      isBlueTheme
-                                        ? "text-[#1d4ed8]"
-                                        : isGreenTheme
+                                    className={`w-3.5 h-3.5 stroke-[3] ${isBlueTheme
+                                      ? "text-[#1d4ed8]"
+                                      : isGreenTheme
                                         ? "text-[#059669]"
                                         : "text-purple-700"
-                                    }`}
+                                      }`}
                                   />
                                   <span>{feat}</span>
                                 </li>
@@ -841,13 +1009,12 @@ export default function DashboardClient({
                           <div className="pt-4 flex items-end justify-between">
                             <Link
                               href="/test/rdso-memory-figure-test-01?trial=true"
-                              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-white font-bold text-xs shadow-xs transition-colors ${
-                                isBlueTheme
-                                  ? "bg-[#1d4ed8] hover:bg-blue-700"
-                                  : isGreenTheme
+                              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-white font-bold text-xs shadow-xs transition-colors ${isBlueTheme
+                                ? "bg-[#1d4ed8] hover:bg-blue-700"
+                                : isGreenTheme
                                   ? "bg-[#059669] hover:bg-emerald-700"
                                   : "bg-purple-700 hover:bg-purple-800"
-                              }`}
+                                }`}
                             >
                               <span>Explore Course</span>
                               <ChevronRight className="w-3.5 h-3.5" />
@@ -891,15 +1058,14 @@ export default function DashboardClient({
                           className="bg-white rounded-xl border border-slate-200/90 p-3 shadow-2xs space-y-2 hover:border-slate-300 transition-colors"
                         >
                           <div
-                            className={`w-8 h-8 rounded-full text-white flex items-center justify-center ${
-                              isTest
-                                ? "bg-indigo-600"
-                                : isVideo
+                            className={`w-8 h-8 rounded-full text-white flex items-center justify-center ${isTest
+                              ? "bg-indigo-600"
+                              : isVideo
                                 ? "bg-rose-500"
                                 : isMaterial
-                                ? "bg-emerald-600"
-                                : "bg-purple-600"
-                            }`}
+                                  ? "bg-emerald-600"
+                                  : "bg-purple-600"
+                              }`}
                           >
                             {isTest ? (
                               <FileText className="w-4 h-4" />

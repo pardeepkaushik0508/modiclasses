@@ -93,12 +93,12 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Banner (Clean Light Theme) */}
-      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/60 to-white border border-blue-100 rounded-2xl p-6 sm:p-8 shadow-xs">
+      {/* Welcome Banner (Student Portal Signature Theme) */}
+      <div className="bg-gradient-to-r from-slate-50 via-blue-50/40 to-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100/70 text-blue-800 border border-blue-200">
-              <ShieldCheck className="w-4 h-4 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-300">
+              <ShieldCheck className="w-4 h-4 text-amber-800" />
               <span>RBAC Engine Guard Active • Role: ADMIN</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -113,7 +113,7 @@ export default async function AdminDashboardPage() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/admin/courses"
-              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm flex items-center gap-2 transition-transform hover:scale-[1.02]"
+              className="px-4 py-2.5 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm flex items-center gap-2 transition-transform hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4" />
               <span>Manage Courses</span>
@@ -121,9 +121,9 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/tests/create"
-              className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-sm flex items-center gap-2 transition-transform hover:scale-[1.02]"
+              className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-semibold shadow-sm flex items-center gap-2 transition-transform hover:scale-[1.02]"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 text-slate-950" />
               <span>RDSO Test Builder</span>
             </Link>
           </div>
@@ -172,7 +172,7 @@ export default async function AdminDashboardPage() {
             </div>
             <Link
               href="/admin/courses"
-              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              className="text-xs font-bold text-[#003366] hover:text-blue-800 flex items-center gap-1"
             >
               <span>View All</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -214,14 +214,14 @@ export default async function AdminDashboardPage() {
         <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <FileQuestion className="w-4 h-4 text-sky-600" />
+              <FileQuestion className="w-4 h-4 text-[#003366]" />
               <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider">
                 RDSO Test Batteries
               </h3>
             </div>
             <Link
               href="/admin/tests/create"
-              className="text-xs font-bold text-sky-600 hover:text-sky-700 flex items-center gap-1"
+              className="text-xs font-bold text-[#003366] hover:text-blue-800 flex items-center gap-1"
             >
               <span>+ New Test</span>
               <ArrowUpRight className="w-3.5 h-3.5" />

@@ -14,32 +14,35 @@ import {
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
+import { getGroupSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
 export default async function GroupsCommunityPage() {
-  // Query total enrolled/registered aspirants from PostgreSQL
-  const totalStudents = await prisma.user.count({
-    where: { role: Role.STUDENT },
-  });
+  // Query total enrolled/registered aspirants and dynamic site group settings from PostgreSQL
+  const [totalStudents, groupSettings] = await Promise.all([
+    prisma.user.count({
+      where: { role: Role.STUDENT },
+    }),
+    getGroupSettings(),
+  ]);
 
   const baseAspirantCount = Math.max(14200, totalStudents * 100 + 14200);
 
   const groups = [
     {
       id: "grp-1",
-      name: "RRB ALP & Technician Psycho CBT 2026 Batch",
+      name: groupSettings.telegramName,
       platform: "Telegram Community",
       platformIcon: Send,
-      link: "https://t.me/five_education_rdso",
+      link: groupSettings.telegramLink,
       members: `${(baseAspirantCount).toLocaleString()}+ Members`,
       activeToday: "1,840 Active Aspirants",
       type: "Public Community",
       badge: "Official Telegram",
       badgeColor: "bg-sky-50 text-[#0284c7] border-sky-200",
       isExclusive: false,
-      description:
-        "Daily memory charts, doubt clearing, peer discussion & official RRB psycho updates directly on Telegram.",
+      description: groupSettings.telegramDescription,
       features: [
         "Daily 12-Figure Memory Chart Practice",
         "Instant T-Score Discussion & Rank Polls",
@@ -50,18 +53,17 @@ export default async function GroupsCommunityPage() {
     },
     {
       id: "grp-2",
-      name: "Station Master (SM) Psycho Cutoff Target 42.0+ Club",
+      name: groupSettings.whatsappName,
       platform: "WhatsApp Community",
       platformIcon: MessageCircle,
-      link: "https://chat.whatsapp.com/invite/FiveEducationRDSO",
+      link: groupSettings.whatsappLink,
       members: "1,024 Members (Max Capacity)",
       activeToday: "340 Active Today",
       type: "Aspirant Community",
       badge: "WhatsApp Batch",
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
       isExclusive: false,
-      description:
-        "High-focus group for Station Master aspirants targeting 42+ T-Score in every battery with daily peer quizzes.",
+      description: groupSettings.whatsappDescription,
       features: [
         "Compass & Clock Test Mental Rotation Tricks",
         "Sectional Qualifying Threshold Discussions",
@@ -72,18 +74,17 @@ export default async function GroupsCommunityPage() {
     },
     {
       id: "grp-3",
-      name: "Five Education Close Group (Exclusive Mentorship)",
+      name: groupSettings.mentorshipName,
       platform: "VIP Mentorship Desk",
       platformIcon: ShieldCheck,
-      link: "https://t.me/+FiveEducationExclusiveMentors",
+      link: groupSettings.mentorshipLink,
       members: "650 Enrolled Scholars",
       activeToday: "120 Active Now",
       type: "Close Group",
       badge: "Exclusive Access",
       badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
       isExclusive: true,
-      description:
-        "Direct 1-on-1 faculty assistance with Ex-RDSO mentors, individualized scorecards, and live strategy audio rooms.",
+      description: groupSettings.mentorshipDescription,
       features: [
         "Direct Voice & Chat with Ex-RDSO Faculty",
         "Personalized Diagnostic Scorecard Reviews",

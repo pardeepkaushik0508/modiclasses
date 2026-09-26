@@ -329,7 +329,7 @@ export default function TestBuilderClient({ courses }: TestBuilderClientProps) {
           </button>
           <button
             onClick={() => router.push("/admin")}
-            className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors"
+            className="px-5 py-2 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors"
           >
             <span>Return to Admin Console</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -362,7 +362,7 @@ export default function TestBuilderClient({ courses }: TestBuilderClientProps) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+            className="px-5 py-2.5 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
           >
             <Check className="w-4 h-4" />
             <span>{isSubmitting ? "Saving to Database..." : "Save & Publish Test"}</span>
@@ -656,7 +656,7 @@ export default function TestBuilderClient({ courses }: TestBuilderClientProps) {
             <button
               type="button"
               onClick={handleAddQuestion}
-              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-colors"
+              className="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-semibold flex items-center gap-1 shadow-sm transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Question</span>
@@ -798,7 +798,7 @@ export default function TestBuilderClient({ courses }: TestBuilderClientProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+          className="px-6 py-2.5 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
         >
           <Check className="w-4 h-4" />
           <span>{isSubmitting ? "Saving to Database..." : "Save & Publish Test"}</span>

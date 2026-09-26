@@ -268,7 +268,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
 
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer hover:scale-[1.02]"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer hover:scale-[1.02]"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Course</span>
@@ -279,7 +279,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
       <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-xs">
               <tr>
                 <th className="py-3.5 px-4">Course Info</th>
                 <th className="py-3.5 px-4">Pricing (INR)</th>
@@ -677,7 +677,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting
                     ? "Saving..."

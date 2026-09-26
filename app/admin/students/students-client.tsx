@@ -39,7 +39,7 @@ export default function StudentsClient({ students }: { students: StudentItem[] }
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Students & Candidates Directory
             </h1>
-            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-sky-50 text-[#003366] border border-sky-200">
               {students.length} Total Registered
             </span>
           </div>
@@ -56,7 +56,7 @@ export default function StudentsClient({ students }: { students: StudentItem[] }
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by name, roll no, email..."
-            className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full bg-white border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#003366] focus:ring-1 focus:ring-[#003366]"
           />
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function StudentsClient({ students }: { students: StudentItem[] }
       <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-xs">
               <tr>
                 <th className="py-3.5 px-4">Candidate</th>
                 <th className="py-3.5 px-4">Roll Number</th>
@@ -88,14 +88,14 @@ export default function StudentsClient({ students }: { students: StudentItem[] }
                   <tr key={s.id} className="hover:bg-slate-50/70 transition-colors">
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-2xs">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#003366] to-indigo-700 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-2xs">
                           {s.name ? s.name.charAt(0).toUpperCase() : "U"}
                         </div>
                         <div>
                           <div className="font-bold text-slate-900 text-xs flex items-center gap-2">
                             <span>{s.name || "Unnamed Candidate"}</span>
                             {s.role === "ADMIN" && (
-                              <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
                                 ADMIN
                               </span>
                             )}

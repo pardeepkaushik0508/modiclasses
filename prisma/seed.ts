@@ -46,6 +46,7 @@ async function main() {
         name: "Five Education Administrator",
         role: Role.ADMIN,
         passwordHash: adminPasswordHash,
+        avatarUrl: "/avatars/admin-avatar.svg",
       },
     });
   } else {
@@ -57,7 +58,7 @@ async function main() {
         passwordHash: adminPasswordHash,
         role: Role.ADMIN,
         rollNo: "FE-ADMIN-01",
-        avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80",
+        avatarUrl: "/avatars/admin-avatar.svg",
       },
     });
   }
@@ -71,6 +72,7 @@ async function main() {
     where: { email: studentEmail },
     update: {
       passwordHash: studentPasswordHash,
+      avatarUrl: "/avatars/student-avatar.svg",
     },
     create: {
       name: "Rahul Sharma",
@@ -79,7 +81,7 @@ async function main() {
       passwordHash: studentPasswordHash,
       role: Role.STUDENT,
       rollNo: "420101",
-      avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=256&q=80",
+      avatarUrl: "/avatars/student-avatar.svg",
     },
   });
   console.log(`✅ Student user verified with ID: ${studentUser.id}`);
