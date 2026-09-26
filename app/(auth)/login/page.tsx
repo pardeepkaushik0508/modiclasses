@@ -87,16 +87,16 @@ function LoginForm() {
         // Redirect based on role or safe callbackUrl
         setTimeout(() => {
           if (callbackUrl && !callbackUrl.includes("/login") && !callbackUrl.includes("/register")) {
-            // If student trying to go to /admin, force /dashboard
+            // If student trying to go to /admin, force /
             if (callbackUrl.startsWith("/admin") && role !== "ADMIN") {
-              router.push("/dashboard");
+              router.push("/");
             } else {
               router.push(callbackUrl);
             }
           } else if (role === "ADMIN") {
             router.push("/admin");
           } else {
-            router.push("/dashboard");
+            router.push("/");
           }
           router.refresh();
         }, 600);

@@ -30,9 +30,9 @@ export async function middleware(req: NextRequest) {
     // 2. Admin route protection -> Strictly ADMIN role
     if (pathname.startsWith("/admin")) {
       if (token.role !== "ADMIN") {
-        // Unauthorized student accessing /admin -> redirect to /dashboard
-        const dashboardUrl = new URL("/dashboard", req.url);
-        return NextResponse.redirect(dashboardUrl);
+        // Unauthorized student accessing /admin -> redirect to /
+        const homeUrl = new URL("/", req.url);
+        return NextResponse.redirect(homeUrl);
       }
     }
   }
@@ -49,7 +49,7 @@ export async function middleware(req: NextRequest) {
       if (token.role === "ADMIN") {
         return NextResponse.redirect(new URL("/admin", req.url));
       }
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
   }
 

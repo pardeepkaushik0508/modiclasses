@@ -178,7 +178,7 @@ export default function DashboardPage() {
               </p>
             </div>
             <Link
-              href="/"
+              href="/test/rdso-memory-figure-test-01?trial=true"
               className="text-xs font-semibold text-[#0284c7] hover:underline flex items-center gap-1"
             >
               <span>Test Engine Demo</span>
@@ -212,7 +212,7 @@ export default function DashboardPage() {
                     <strong className="text-emerald-700">{battery.scoreCutoff}</strong>
                   </div>
                   <Link
-                    href="/"
+                    href={battery.id === "MEMORY_FIGURE" ? "/test/rdso-memory-figure-test-01" : "/test/rdso-memory-figure-test-01?trial=true"}
                     className="inline-flex items-center gap-1 font-semibold text-[#0284c7] hover:text-[#0369a1]"
                   >
                     <span>Launch</span>

@@ -16,8 +16,8 @@ export default async function AdminLayout({
   }
 
   if (session.user.role !== "ADMIN") {
-    // If authenticated student tries to access admin panel, redirect to student dashboard
-    redirect("/dashboard");
+    // If authenticated student tries to access admin panel, redirect to home
+    redirect("/");
   }
 
   return (

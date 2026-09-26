@@ -425,7 +425,7 @@ async function runComplianceAudit() {
     "Security & RBAC: Edge Route Guards & Role-Based Navigation Routing",
     hasAdminGuard && hasRoleDispatch,
     "Strict Role-Based Edge Middleware",
-    `Unauthenticated /admin requests blocked with HTTP 307 redirect to /login; ADMIN routed to /admin, STUDENT to /dashboard.`
+    `Unauthenticated /admin requests blocked with HTTP 307 redirect to /login; ADMIN routed to /admin, STUDENT to / (3-column Navy sidebar portal).`
   );
 
   // =========================================================================

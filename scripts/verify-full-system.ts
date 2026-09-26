@@ -503,15 +503,15 @@ async function runFullSystemVerification() {
   const loginCode = fs.existsSync(loginPath) ? fs.readFileSync(loginPath, "utf8") : "";
 
   const middlewareAdminRedirect = middlewareCode.includes('token.role === "ADMIN"') && middlewareCode.includes('NextResponse.redirect(new URL("/admin", req.url))');
-  const middlewareStudentRedirect = middlewareCode.includes('NextResponse.redirect(new URL("/dashboard", req.url))');
+  const middlewareStudentRedirect = middlewareCode.includes('NextResponse.redirect(new URL("/", req.url))');
   const loginClientAdminRouting = loginCode.includes('role === "ADMIN"') && loginCode.includes('router.push("/admin")');
-  const loginClientStudentRouting = loginCode.includes('router.push("/dashboard")');
+  const loginClientStudentRouting = loginCode.includes('router.push("/")');
 
   recordCheck(
     "role-destination-routing",
-    "Role Destination Routing (Admin -> /admin, Student -> /dashboard)",
+    "Role Destination Routing (Admin -> /admin, Student -> /)",
     middlewareAdminRedirect && middlewareStudentRedirect && loginClientAdminRouting && loginClientStudentRouting,
-    `Verified in middleware.ts and login/page.tsx: ADMIN lands on /admin; STUDENT lands on /dashboard.`
+    `Verified in middleware.ts and login/page.tsx: ADMIN lands on /admin; STUDENT lands on / (3-column Navy sidebar portal).`
   );
 
   // =========================================================================
