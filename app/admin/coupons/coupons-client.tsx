@@ -453,9 +453,9 @@ export default function CouponsClient({ coupons: initialCoupons }: CouponsClient
          ======================================================== */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl border border-slate-200 w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-150">
+          <div className="bg-white rounded-2xl border border-slate-200 w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in zoom-in-95 duration-150">
             {/* Modal Header */}
-            <div className="bg-[#0b192e] text-white p-5 flex items-center justify-between">
+            <div className="bg-[#0b192e] text-white p-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30">
                   <Tag className="w-4 h-4" />
@@ -474,7 +474,7 @@ export default function CouponsClient({ coupons: initialCoupons }: CouponsClient
             </div>
 
             {/* Form */}
-            <form onSubmit={handleCreateCoupon} className="p-6 space-y-4 text-xs">
+            <form onSubmit={handleCreateCoupon} className="p-6 space-y-4 text-xs overflow-y-auto flex-1">
               {formError && (
                 <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />

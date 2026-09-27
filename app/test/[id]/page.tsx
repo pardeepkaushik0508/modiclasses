@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
 import RDSOExamRunnerClient, { TestData } from "./rdso-runner-client";
+import StudentAppLayout from "@/components/layout/student-app-layout";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -139,5 +140,9 @@ export default async function RDSOExamRunnerPage({ params }: PageProps) {
     })),
   };
 
-  return <RDSOExamRunnerClient test={formattedTest} session={session} />;
+  return (
+    <StudentAppLayout>
+      <RDSOExamRunnerClient test={formattedTest} session={session} />
+    </StudentAppLayout>
+  );
 }

@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
 import VideoClient, { SerializedVideoLesson } from "./video-client";
+import StudentAppLayout from "@/components/layout/student-app-layout";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +59,7 @@ export default async function VideoClassesPage() {
     return {
       id: v.id,
       title: v.title,
+      duration: v.duration || null,
       fileUrl: isAccessible ? v.fileUrl : null,
       isFree: v.isFree,
       createdAt: v.createdAt.toISOString(),
@@ -66,10 +68,12 @@ export default async function VideoClassesPage() {
   });
 
   return (
-    <VideoClient
-      videos={videos}
-      enrolledCourseIds={enrolledCourseIds}
-      isAdmin={isAdmin}
-    />
+    <StudentAppLayout>
+      <VideoClient
+        videos={videos}
+        enrolledCourseIds={enrolledCourseIds}
+        isAdmin={isAdmin}
+      />
+    </StudentAppLayout>
   );
 }

@@ -41,6 +41,7 @@ interface CoursesClientProps {
 
 export default function CoursesClient({ initialCourses }: CoursesClientProps) {
   const [courses, setCourses] = useState<CourseItem[]>(initialCourses);
+  const [courseFilter, setCourseFilter] = useState<"ALL" | "PAID" | "FREE">("ALL");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<CourseItem | null>(null);
 
@@ -48,6 +49,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
+  const [isFreeTier, setIsFreeTier] = useState(false);
   const [price, setPrice] = useState("999");
   const [discountedPrice, setDiscountedPrice] = useState("499");
   const [validityDays, setValidityDays] = useState("365");
@@ -71,11 +73,20 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
     setTimeout(() => setSuccessToast(null), 3500);
   };
 
+  const isFree = (c: CourseItem) => c.price === 0 || (c.discountedPrice !== null && c.discountedPrice === 0);
+
+  const filteredCourses = courses.filter((c) => {
+    if (courseFilter === "PAID") return !isFree(c);
+    if (courseFilter === "FREE") return isFree(c);
+    return true;
+  });
+
   const openCreateModal = () => {
     setEditingCourse(null);
     setTitle("");
     setSlug("");
     setDescription("");
+    setIsFreeTier(false);
     setPrice("999");
     setDiscountedPrice("499");
     setValidityDays("365");
@@ -92,6 +103,8 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
     setTitle(c.title);
     setSlug(c.slug);
     setDescription(c.description || "");
+    const free = isFree(c);
+    setIsFreeTier(free);
     setPrice(c.price.toString());
     setDiscountedPrice(c.discountedPrice?.toString() || "");
     setValidityDays(c.validityDays.toString());
@@ -154,12 +167,12 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
         throw new Error("Course title is required.");
       }
 
-      const numPrice = parseFloat(price);
+      const numPrice = isFreeTier ? 0 : parseFloat(price);
       if (isNaN(numPrice) || numPrice < 0) {
         throw new Error("Please enter a valid price.");
       }
 
-      const numDiscount = discountedPrice ? parseFloat(discountedPrice) : null;
+      const numDiscount = isFreeTier ? 0 : (discountedPrice ? parseFloat(discountedPrice) : null);
       const numValidity = parseInt(validityDays) || 365;
 
       if (editingCourse) {
@@ -275,6 +288,40 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
         </button>
       </div>
 
+      {/* Free vs Paid Filter Tabs */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+        <button
+          onClick={() => setCourseFilter("ALL")}
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+            courseFilter === "ALL"
+              ? "bg-[#003366] text-white shadow-xs"
+              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+          }`}
+        >
+          All Courses ({courses.length})
+        </button>
+        <button
+          onClick={() => setCourseFilter("PAID")}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+            courseFilter === "PAID"
+              ? "bg-indigo-600 text-white shadow-xs"
+              : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200"
+          }`}
+        >
+          <span>Paid Courses ({courses.filter((c) => !isFree(c)).length})</span>
+        </button>
+        <button
+          onClick={() => setCourseFilter("FREE")}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+            courseFilter === "FREE"
+              ? "bg-emerald-600 text-white shadow-xs"
+              : "bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200"
+          }`}
+        >
+          <span>Free Courses ({courses.filter((c) => isFree(c)).length})</span>
+        </button>
+      </div>
+
       {/* Courses List Table (Clean Light Theme) */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
@@ -282,6 +329,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
             <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-xs">
               <tr>
                 <th className="py-3.5 px-4">Course Info</th>
+                <th className="py-3.5 px-4">Tier</th>
                 <th className="py-3.5 px-4">Pricing (INR)</th>
                 <th className="py-3.5 px-4">Validity</th>
                 <th className="py-3.5 px-4">Features</th>
@@ -290,18 +338,18 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {courses.length === 0 ? (
+              {filteredCourses.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-500">
+                  <td colSpan={7} className="py-12 text-center text-slate-500">
                     <BookOpen className="w-10 h-10 mx-auto text-slate-300 mb-2" />
-                    <p className="font-semibold text-sm text-slate-700">No courses found in database.</p>
+                    <p className="font-semibold text-sm text-slate-700">No courses match the selected filter.</p>
                     <p className="text-xs text-slate-400 mt-1">
-                      Click &ldquo;Create New Course&rdquo; above to publish your first course.
+                      Try selecting another filter tab or create a new course.
                     </p>
                   </td>
                 </tr>
               ) : (
-                courses.map((c) => (
+                filteredCourses.map((c) => (
                   <tr key={c.id} className="hover:bg-slate-50/70 transition-colors">
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
@@ -330,6 +378,18 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                           )}
                         </div>
                       </div>
+                    </td>
+
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      {isFree(c) ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase tracking-wide">
+                          FREE COURSE
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wide">
+                          PAID COURSE
+                        </span>
+                      )}
                     </td>
 
                     <td className="py-4 px-4 whitespace-nowrap">
@@ -428,9 +488,9 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
           CREATE / EDIT COURSE MODAL (CLEAN LIGHT THEME)
          ======================================================== */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl my-8">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 <h3 className="font-bold text-slate-900 text-base">
@@ -439,19 +499,77 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+            <form id="courseForm" onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto flex-1">
               {errorMessage && (
                 <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
                   <span>{errorMessage}</span>
                 </div>
               )}
+
+              {/* Course Tier Selector (Free vs Paid) */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Course Access Tier <span className="text-rose-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsFreeTier(false);
+                      if (price === "0" || !price) setPrice("999");
+                      if (discountedPrice === "0") setDiscountedPrice("499");
+                    }}
+                    className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
+                      !isFreeTier
+                        ? "border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20"
+                        : "border-slate-200 hover:border-slate-300 bg-white"
+                    }`}
+                  >
+                    <span className={`w-4 h-4 mt-0.5 rounded-full border-2 flex items-center justify-center shrink-0 ${!isFreeTier ? "border-blue-600" : "border-slate-300"}`}>
+                      {!isFreeTier && <span className="w-2 h-2 rounded-full bg-blue-600" />}
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-slate-900">Paid Masterclass</span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">PAID</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-0.5">Requires course purchase or active batch enrollment</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsFreeTier(true);
+                      setPrice("0");
+                      setDiscountedPrice("0");
+                    }}
+                    className={`p-3.5 rounded-xl border text-left flex items-start gap-3 transition-all ${
+                      isFreeTier
+                        ? "border-emerald-600 bg-emerald-50/60 ring-2 ring-emerald-500/20"
+                        : "border-slate-200 hover:border-slate-300 bg-white"
+                    }`}
+                  >
+                    <span className={`w-4 h-4 mt-0.5 rounded-full border-2 flex items-center justify-center shrink-0 ${isFreeTier ? "border-emerald-600" : "border-slate-300"}`}>
+                      {isFreeTier && <span className="w-2 h-2 rounded-full bg-emerald-600" />}
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-emerald-900">Free Open Course</span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">FREE</span>
+                      </div>
+                      <p className="text-[11px] text-emerald-700/80 mt-0.5">Free for all students (₹0), instant open access</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
 
               {/* Title & Slug */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -519,9 +637,12 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                       type="number"
                       required
                       min="0"
-                      value={price}
+                      disabled={isFreeTier}
+                      value={isFreeTier ? "0" : price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className="w-full bg-white border border-slate-300 rounded-xl pl-7 pr-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      className={`w-full border rounded-xl pl-7 pr-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                        isFreeTier ? "bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed" : "bg-white border-slate-300"
+                      }`}
                     />
                   </div>
                 </div>
@@ -535,10 +656,13 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                     <input
                       type="number"
                       min="0"
-                      value={discountedPrice}
+                      disabled={isFreeTier}
+                      value={isFreeTier ? "0" : discountedPrice}
                       onChange={(e) => setDiscountedPrice(e.target.value)}
-                      placeholder="Optional"
-                      className="w-full bg-white border border-slate-300 rounded-xl pl-7 pr-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      placeholder={isFreeTier ? "0" : "Optional"}
+                      className={`w-full border rounded-xl pl-7 pr-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                        isFreeTier ? "bg-slate-100 border-slate-200 text-slate-500 cursor-not-allowed" : "bg-white border-slate-300"
+                      }`}
                     />
                   </div>
                 </div>
@@ -664,29 +788,30 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                   Publish Immediately (Instantly visible in User Home/Dashboard page)
                 </label>
               </div>
-
-              {/* Modal Footer Actions */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 bg-slate-50/50 -mx-6 -mb-6 p-6">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
-                >
-                  {isSubmitting
-                    ? "Saving..."
-                    : editingCourse
-                    ? "Save Changes"
-                    : "Create Course"}
-                </button>
-              </div>
             </form>
+
+            {/* Modal Footer Actions - Always visible, never cut off */}
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/90 flex items-center justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="courseForm"
+                disabled={isSubmitting}
+                className="px-5 py-2 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-sm transition-all cursor-pointer disabled:opacity-50"
+              >
+                {isSubmitting
+                  ? "Saving..."
+                  : editingCourse
+                  ? "Save Changes"
+                  : "Create Course"}
+              </button>
+            </div>
           </div>
         </div>
       )}

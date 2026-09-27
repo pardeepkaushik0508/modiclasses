@@ -331,20 +331,31 @@ export default function DashboardClient({
     setTimeout(() => setCopiedLink(false), 3000);
   };
 
-  // Filter courses dynamically based on search query
-  const filteredCourses = courses.filter((c) =>
-    c.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [courseTierFilter, setCourseTierFilter] = useState<"ALL" | "PAID" | "FREE">("ALL");
+
+  const isCourseFree = (c: CourseItem) =>
+    c.price === 0 || (c.discountedPrice !== null && c.discountedPrice === 0);
+
+  // Filter courses dynamically based on search query and access tier
+  const filteredCourses = courses.filter((c) => {
+    const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!matchesSearch) return false;
+    if (courseTierFilter === "PAID") return !isCourseFree(c);
+    if (courseTierFilter === "FREE") return isCourseFree(c);
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-[#f4f6f9] flex flex-col antialiased text-slate-800">
       <div className="flex-1 flex w-full">
         {/* ========================================================
             1. PERSISTENT DARK BLUE LEFT SIDEBAR (#0b192e / #0f172a)
+            Pinned and fixed to left viewport, never scrolls away
            ======================================================== */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0b192e] text-slate-300 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } shadow-2xl lg:shadow-none lg:static`}
+          className={`fixed inset-y-0 left-0 z-40 w-64 h-screen bg-[#0b192e] text-slate-300 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } shadow-2xl lg:shadow-none`}
         >
           <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
             {/* Logo & Mobile Close */}
@@ -574,7 +585,7 @@ export default function DashboardClient({
         {/* ========================================================
             2. MAIN CONTENT + RIGHT WIDGETS COLUMN
            ======================================================== */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="lg:pl-64 flex-1 flex flex-col min-w-0">
           {/* TOP BAR & SEARCH AREA */}
           <header className="bg-white border-b border-slate-200/90 px-4 sm:px-8 py-3 sticky top-0 z-30 shadow-2xs">
             <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
@@ -941,59 +952,144 @@ export default function DashboardClient({
                   </div>
                 </div>
 
-                {/* "Our Courses" Section: Dynamic Stacking Downwards from DB */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
-                      Our Courses ({filteredCourses.length})
-                    </h2>
-                    <Link
-                      href="/dashboard"
-                      className="text-xs font-bold text-[#1d4ed8] hover:underline flex items-center gap-1"
-                    >
-                      <span>View All Courses</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
+                {/* "Our Courses" Section: Dynamic Stacking Downwards from DB with Free vs Paid Filters */}
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-slate-200/80">
+                    <div className="flex items-center gap-2.5">
+                      <h2 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+                        Course Catalog
+                      </h2>
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">
+                        {filteredCourses.length}
+                      </span>
+                    </div>
+
+                    {/* Quick Filter Tabs: All, Paid, Free */}
+                    <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold self-start sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => setCourseTierFilter("ALL")}
+                        className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                          courseTierFilter === "ALL"
+                            ? "bg-white text-slate-900 shadow-xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        All ({courses.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCourseTierFilter("PAID")}
+                        className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                          courseTierFilter === "PAID"
+                            ? "bg-[#003366] text-white shadow-xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        <span>Paid Masterclasses</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                          courseTierFilter === "PAID" ? "bg-white/20 text-white" : "bg-blue-100 text-blue-800"
+                        }`}>
+                          {courses.filter((c) => !isCourseFree(c)).length}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCourseTierFilter("FREE")}
+                        className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                          courseTierFilter === "FREE"
+                            ? "bg-emerald-600 text-white shadow-xs"
+                            : "text-slate-600 hover:text-slate-900"
+                        }`}
+                      >
+                        <span>Free Courses</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                          courseTierFilter === "FREE" ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-800"
+                        }`}>
+                          {courses.filter((c) => isCourseFree(c)).length}
+                        </span>
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Empty State when filter has no results */}
+                  {filteredCourses.length === 0 && (
+                    <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
+                      <p className="text-sm font-bold text-slate-700">No courses found matching selected filter.</p>
+                      <button
+                        onClick={() => setCourseTierFilter("ALL")}
+                        className="mt-2 text-xs font-bold text-blue-600 hover:underline"
+                      >
+                        Reset to All Courses
+                      </button>
+                    </div>
+                  )}
 
                   {/* Dynamic grid where any number of courses automatically stack downwards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {filteredCourses.map((course, cIdx) => {
+                      const isFree = isCourseFree(course);
                       const isBlueTheme = cIdx % 3 === 0;
                       const isGreenTheme = cIdx % 3 === 1;
 
                       return (
                         <div
                           key={course.id}
-                          className={`rounded-2xl border p-5 shadow-2xs flex flex-col justify-between ${isBlueTheme
-                            ? "bg-[#f0f7ff] border-blue-200/80"
-                            : isGreenTheme
+                          className={`rounded-2xl border p-5 shadow-2xs flex flex-col justify-between transition-all hover:shadow-md ${
+                            isFree
+                              ? "bg-gradient-to-br from-emerald-50/70 to-teal-50/40 border-emerald-200"
+                              : isBlueTheme
+                              ? "bg-[#f0f7ff] border-blue-200/80"
+                              : isGreenTheme
                               ? "bg-[#f0fdf4] border-emerald-200/80"
                               : "bg-[#fdf4ff] border-purple-200/80"
-                            }`}
+                          }`}
                         >
                           <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <span
-                                className={`inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold text-white ${isBlueTheme
-                                  ? "bg-[#1d4ed8]"
-                                  : isGreenTheme
-                                    ? "bg-[#059669]"
-                                    : "bg-purple-700"
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-1.5">
+                                <span
+                                  className={`inline-block px-2.5 py-0.5 rounded-md text-[11px] font-bold text-white ${
+                                    isFree
+                                      ? "bg-emerald-600"
+                                      : isBlueTheme
+                                      ? "bg-[#1d4ed8]"
+                                      : isGreenTheme
+                                      ? "bg-[#059669]"
+                                      : "bg-purple-700"
                                   }`}
-                              >
-                                Course {cIdx + 1}
-                              </span>
+                                >
+                                  Course {cIdx + 1}
+                                </span>
 
-                              <div className="flex items-center gap-1 text-xs">
-                                {course.discountedPrice && (
-                                  <span className="text-slate-400 line-through">
-                                    ₹{course.price}
+                                {isFree ? (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                    FREE COURSE
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
+                                    PAID
                                   </span>
                                 )}
-                                <span className="font-extrabold text-slate-900">
-                                  ₹{course.discountedPrice || course.price}
-                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-1 text-xs">
+                                {isFree ? (
+                                  <span className="font-extrabold text-emerald-700 text-sm">
+                                    ₹0 Free
+                                  </span>
+                                ) : (
+                                  <>
+                                    {course.discountedPrice && (
+                                      <span className="text-slate-400 line-through">
+                                        ₹{course.price}
+                                      </span>
+                                    )}
+                                    <span className="font-extrabold text-slate-900 text-sm">
+                                      ₹{course.discountedPrice || course.price}
+                                    </span>
+                                  </>
+                                )}
                               </div>
                             </div>
 
@@ -1005,12 +1101,15 @@ export default function DashboardClient({
                               {course.features.map((feat, fIdx) => (
                                 <li key={fIdx} className="flex items-center gap-2">
                                   <Check
-                                    className={`w-3.5 h-3.5 stroke-[3] ${isBlueTheme
-                                      ? "text-[#1d4ed8]"
-                                      : isGreenTheme
+                                    className={`w-3.5 h-3.5 stroke-[3] ${
+                                      isFree
+                                        ? "text-emerald-600"
+                                        : isBlueTheme
+                                        ? "text-[#1d4ed8]"
+                                        : isGreenTheme
                                         ? "text-[#059669]"
                                         : "text-purple-700"
-                                      }`}
+                                    }`}
                                   />
                                   <span>{feat}</span>
                                 </li>
@@ -1027,15 +1126,24 @@ export default function DashboardClient({
                                 <CheckCircle2 className="w-3.5 h-3.5" />
                                 <span>Enrolled • Go to Course</span>
                               </Link>
+                            ) : isFree ? (
+                              <Link
+                                href="/study-material"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors"
+                              >
+                                <span>Start Free Course</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                              </Link>
                             ) : (
                               <Link
                                 href={`/checkout/${course.slug}`}
-                                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-white font-bold text-xs shadow-xs transition-colors ${isBlueTheme
-                                  ? "bg-[#1d4ed8] hover:bg-blue-700"
-                                  : isGreenTheme
+                                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-white font-bold text-xs shadow-xs transition-colors ${
+                                  isBlueTheme
+                                    ? "bg-[#1d4ed8] hover:bg-blue-700"
+                                    : isGreenTheme
                                     ? "bg-[#059669] hover:bg-emerald-700"
                                     : "bg-purple-700 hover:bg-purple-800"
-                                  }`}
+                                }`}
                               >
                                 <span>Enroll Now</span>
                                 <ChevronRight className="w-3.5 h-3.5" />
@@ -1341,9 +1449,9 @@ export default function DashboardClient({
           ACCESSIBLE MODAL 1: REFERRAL & EARN DIALOG
          ======================================================== */}
       {referModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="bg-gradient-to-r from-[#4f46e5] to-[#2563eb] text-white p-5 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
+            <div className="bg-gradient-to-r from-[#4f46e5] to-[#2563eb] text-white p-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <Gift className="w-5 h-5 text-amber-300" />
                 <h3 className="font-extrabold text-base">Referral & Earn Rewards</h3>
@@ -1356,7 +1464,7 @@ export default function DashboardClient({
               </button>
             </div>
 
-            <div className="p-6 space-y-4 text-xs text-slate-600">
+            <div className="p-6 space-y-4 text-xs text-slate-600 overflow-y-auto flex-1">
               <p>
                 Share your personal PI EDUCATION referral link with fellow RRB aspirants. When they join, both of you receive <strong>5 Free Psycho Mock Tests</strong> and <strong>₹200 Course Credits</strong>.
               </p>
@@ -1383,7 +1491,7 @@ export default function DashboardClient({
               </div>
             </div>
 
-            <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end">
+            <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end shrink-0">
               <button
                 onClick={() => setReferModalOpen(false)}
                 className="px-4 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs cursor-pointer"
@@ -1399,9 +1507,9 @@ export default function DashboardClient({
           ACCESSIBLE MODAL 2: CLOSE GROUP ENROLLMENT DIALOG
          ======================================================== */}
       {closeGroupModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="bg-gradient-to-r from-rose-600 to-rose-700 text-white p-5 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
+            <div className="bg-gradient-to-r from-rose-600 to-rose-700 text-white p-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <Lock className="w-5 h-5 text-rose-200" />
                 <h3 className="font-extrabold text-base">Close Group Exclusive Access</h3>
@@ -1414,7 +1522,7 @@ export default function DashboardClient({
               </button>
             </div>
 
-            <div className="p-6 space-y-4 text-xs text-slate-600">
+            <div className="p-6 space-y-4 text-xs text-slate-600 overflow-y-auto flex-1">
               <p>
                 The <strong>PI EDUCATION Close Group</strong> is an invite-only cohort reserved for candidates preparing for Indian Railways RRB ALP & Station Master Aptitude batteries.
               </p>
@@ -1432,7 +1540,7 @@ export default function DashboardClient({
               </div>
             </div>
 
-            <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end gap-2">
+            <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
               <button
                 onClick={() => setCloseGroupModalOpen(false)}
                 className="px-4 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs cursor-pointer"

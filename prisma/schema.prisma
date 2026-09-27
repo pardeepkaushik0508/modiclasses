@@ -118,6 +118,7 @@ model StudyMaterial {
   title     String
   fileUrl   String
   fileType  String   // e.g., 'PDF' | 'VIDEO'
+  duration  String?  // Video runtime e.g., '3 Mins', '14 Mins'
   isFree    Boolean  @default(false)
   createdAt DateTime @default(now())
 

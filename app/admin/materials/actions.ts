@@ -18,6 +18,7 @@ export interface MaterialFormData {
   title: string;
   fileUrl: string;
   fileType: string; // 'PDF' | 'VIDEO' | 'DOC'
+  duration?: string | null;
   isFree?: boolean;
 }
 
@@ -41,17 +42,47 @@ export async function createStudyMaterial(data: MaterialFormData) {
         courseId: data.courseId,
         fileUrl: data.fileUrl.trim(),
         fileType: data.fileType || "PDF",
+        duration: data.duration?.trim() || null,
         isFree: Boolean(data.isFree),
       },
     });
 
     revalidatePath("/admin/materials");
     revalidatePath("/study-material");
+    revalidatePath("/video");
 
     return { success: true, material };
   } catch (err: any) {
     console.error("createStudyMaterial error:", err);
     return { success: false, error: err.message || "Failed to create material." };
+  }
+}
+
+export async function updateStudyMaterial(id: string, data: Partial<MaterialFormData>) {
+  try {
+    await ensureAdmin();
+
+    const updateData: any = {};
+    if (data.title !== undefined) updateData.title = data.title.trim();
+    if (data.courseId !== undefined) updateData.courseId = data.courseId;
+    if (data.fileUrl !== undefined) updateData.fileUrl = data.fileUrl.trim();
+    if (data.fileType !== undefined) updateData.fileType = data.fileType;
+    if (data.duration !== undefined) updateData.duration = data.duration?.trim() || null;
+    if (data.isFree !== undefined) updateData.isFree = Boolean(data.isFree);
+
+    const material = await prisma.studyMaterial.update({
+      where: { id },
+      data: updateData,
+    });
+
+    revalidatePath("/admin/materials");
+    revalidatePath("/study-material");
+    revalidatePath("/video");
+
+    return { success: true, material };
+  } catch (err: any) {
+    console.error("updateStudyMaterial error:", err);
+    return { success: false, error: err.message || "Failed to update material." };
   }
 }
 
@@ -65,6 +96,7 @@ export async function deleteStudyMaterial(id: string) {
 
     revalidatePath("/admin/materials");
     revalidatePath("/study-material");
+    revalidatePath("/video");
 
     return { success: true };
   } catch (err: any) {

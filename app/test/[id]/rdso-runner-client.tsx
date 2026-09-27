@@ -1613,7 +1613,7 @@ export default function RDSOExamRunnerClient({
          ======================================================== */}
       {showConfirmSubmit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl text-center animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl text-center animate-in fade-in zoom-in-95 duration-150">
             <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
               <CheckCircle2 className="w-6 h-6" />
             </div>
@@ -1670,8 +1670,8 @@ export default function RDSOExamRunnerClient({
          ======================================================== */}
       {showInstructions && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-lg p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div className="bg-white border border-slate-300 rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between p-6 pb-3 border-b border-slate-200 shrink-0">
               <div className="flex items-center gap-2">
                 <Info className="w-5 h-5 text-[#003366]" />
                 <h3 className="font-bold text-slate-900 text-base">
@@ -1686,7 +1686,7 @@ export default function RDSOExamRunnerClient({
               </button>
             </div>
 
-            <div className="text-xs text-slate-700 space-y-2.5 max-h-[60vh] overflow-y-auto leading-relaxed">
+            <div className="text-xs text-slate-700 space-y-2.5 p-6 overflow-y-auto flex-1 leading-relaxed">
               <p>
                 <strong>1. Two-Phase Rule (द्वि-चरणीय नियम):</strong> स्मृति परीक्षण (Memory Test) दो भागों में आयोजित होता है।
               </p>
@@ -1706,7 +1706,7 @@ export default function RDSOExamRunnerClient({
               </p>
             </div>
 
-            <div className="pt-3 border-t border-slate-200 text-right">
+            <div className="p-4 border-t border-slate-200 bg-slate-50 text-right shrink-0">
               <button
                 onClick={() => setShowInstructions(false)}
                 className="px-4 py-2 rounded-xl bg-[#003366] text-white text-xs font-bold cursor-pointer"
@@ -1723,7 +1723,7 @@ export default function RDSOExamRunnerClient({
          ======================================================== */}
       {phaseState === "RESULT_MODAL" && submissionResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white border-2 border-[#003366] rounded-2xl w-full max-w-xl p-6 sm:p-8 space-y-6 shadow-2xl my-8 text-center animate-in fade-in zoom-in-95">
+          <div className="bg-white border-2 border-[#003366] rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 shadow-2xl text-center animate-in fade-in zoom-in-95">
             {/* Crest & Title */}
             <div className="flex items-center justify-center gap-3">
               <PiEducationCrest className="w-12 h-12" />

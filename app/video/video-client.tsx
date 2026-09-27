@@ -22,6 +22,7 @@ import {
 export interface SerializedVideoLesson {
   id: string;
   title: string;
+  duration?: string | null;
   fileUrl: string | null;
   isFree: boolean;
   createdAt: string;
@@ -38,11 +39,11 @@ interface VideoClientProps {
   isAdmin: boolean;
 }
 
-// Helper to extract clean metadata from title
-function parseVideoMeta(title: string) {
+// Helper to extract clean metadata from video object
+function parseVideoMeta(title: string, dbDuration?: string | null) {
   let cleanTitle = title;
-  let duration = "25 Mins";
-  let instructor = "PI EDUCATION RDSO Mentor";
+  let duration = dbDuration?.trim() || "";
+  let instructor = "Five Education RDSO Mentor";
   let batteryTag = "RDSO Battery";
 
   // Check battery type
@@ -54,18 +55,25 @@ function parseVideoMeta(title: string) {
   else if (lower.includes("speed") || lower.includes("hexagonal")) batteryTag = "Perceptual Speed";
   else if (lower.includes("strategy") || lower.includes("cutoff")) batteryTag = "Strategy Masterclass";
 
-  // Check parenthesized metadata e.g. "(24 Mins • Er. Sharma)"
+  // Clean parenthesized metadata e.g. "(24 Mins • Er. Sharma)"
   const match = title.match(/\((.*?)\)/);
   if (match && match[1]) {
     cleanTitle = title.replace(/\(.*?\)/, "").trim();
     const parts = match[1].split(/[•|]/).map((p) => p.trim());
     for (const part of parts) {
-      if (part.toLowerCase().includes("min") || part.toLowerCase().includes("hr")) {
-        duration = part;
-      } else if (part.length > 2) {
+      if (part.toLowerCase().includes("min") || part.toLowerCase().includes("hr") || part.toLowerCase().includes("sec")) {
+        if (!duration) {
+          duration = part;
+        }
+      } else if (part.length > 2 && !part.toLowerCase().includes("min") && !part.toLowerCase().includes("sec")) {
         instructor = part;
       }
     }
+  }
+
+  // Fallback strictly to "--" if no duration is provided (remove any hardcoded numbers)
+  if (!duration) {
+    duration = "--";
   }
 
   return { cleanTitle, duration, instructor, batteryTag };
@@ -116,7 +124,7 @@ export default function VideoClient({
   const parsedVideos = useMemo(() => {
     return videos.map((v) => ({
       ...v,
-      meta: parseVideoMeta(v.title),
+      meta: parseVideoMeta(v.title, v.duration),
     }));
   }, [videos]);
 
@@ -143,7 +151,7 @@ export default function VideoClient({
     });
   }, [parsedVideos, batteryFilter, searchQuery]);
 
-  const activeVideoMeta = selectedVideo ? parseVideoMeta(selectedVideo.title) : null;
+  const activeVideoMeta = selectedVideo ? parseVideoMeta(selectedVideo.title, selectedVideo.duration) : null;
   const isSelectedVideoAccessible = selectedVideo
     ? selectedVideo.isFree || isAdmin || enrolledCourseIds.includes(selectedVideo.course.id)
     : false;
@@ -304,8 +312,8 @@ export default function VideoClient({
           - Candidate Access Guard & Lock Barrier
          ======================================================== */}
       {selectedVideo && activeVideoMeta && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-slate-800 text-white">
               <div className="flex items-center gap-2.5 truncate">

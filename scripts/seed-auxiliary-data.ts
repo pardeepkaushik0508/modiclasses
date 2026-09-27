@@ -99,45 +99,51 @@ async function seedAuxiliaryData() {
     }
   }
 
-  // Video Classes Data
+  // Video Classes Data with accurate durations
   const videos = [
     {
-      title: "Battery 1: Memory Figures Association & 30-Second Recall Method (24 Mins • Er. Sharma)",
+      title: "Battery 1: Memory Figures Association & 30-Second Recall Method",
+      duration: "3 Mins",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: true,
       courseId: (course2 || course1).id,
     },
     {
-      title: "Battery 2: Clock Direction & Compass Angle Rapid Solution Tricks (18 Mins • Rajesh Kumar)",
+      title: "Battery 2: Clock Direction & Compass Angle Rapid Solution Tricks",
+      duration: "3 Mins",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: true,
       courseId: (course2 || course1).id,
     },
     {
-      title: "Battery 3: 3D Brick Depth Perception & Hidden Block Counting Strategy (32 Mins • Er. Sharma)",
+      title: "Battery 3: 3D Brick Depth Perception & Hidden Block Counting Strategy",
+      duration: "3 Mins",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: false,
       courseId: (course2 || course1).id,
     },
     {
-      title: "Battery 4: Concentration (Yes/No) High-Speed Matching Drills (28 Mins • Dr. A. Verma)",
+      title: "Battery 4: Concentration (Yes/No) High-Speed Matching Drills",
+      duration: "3 Mins",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: false,
       courseId: (course2 || course1).id,
     },
     {
-      title: "Battery 5: Perceptual Speed & Hexagonal Pattern Recognition Masterclass (22 Mins • Rajesh Kumar)",
+      title: "Battery 5: Perceptual Speed & Hexagonal Pattern Recognition Masterclass",
+      duration: "3 Mins",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: false,
       courseId: (course2 || course1).id,
     },
     {
-      title: "RDSO Psycho CBT 2026 Strategy: Cutoff Secrets & Sectional Qualifying Rules (35 Mins • PI EDUCATION)",
+      title: "RDSO Psycho CBT 2026 Strategy: Cutoff Secrets & Sectional Qualifying Rules",
+      duration: "3 Mins",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: true,

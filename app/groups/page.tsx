@@ -15,6 +15,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { getGroupSettings } from "@/lib/settings";
+import StudentAppLayout from "@/components/layout/student-app-layout";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,8 @@ export default async function GroupsCommunityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 p-4 sm:p-6 md:p-10 max-w-7xl mx-auto space-y-6">
+    <StudentAppLayout>
+      <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6">
       {/* Top Navigation & Status */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
@@ -293,5 +295,6 @@ export default async function GroupsCommunityPage() {
         })}
       </div>
     </div>
+    </StudentAppLayout>
   );
 }

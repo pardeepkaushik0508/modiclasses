@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
 import StudyMaterialClient, { SerializedStudyMaterial } from "./study-material-client";
+import StudentAppLayout from "@/components/layout/student-app-layout";
 
 export const dynamic = "force-dynamic";
 
@@ -69,10 +70,12 @@ export default async function StudyMaterialPage() {
   });
 
   return (
-    <StudyMaterialClient
-      materials={materials}
-      enrolledCourseIds={enrolledCourseIds}
-      isAdmin={isAdmin}
-    />
+    <StudentAppLayout>
+      <StudyMaterialClient
+        materials={materials}
+        enrolledCourseIds={enrolledCourseIds}
+        isAdmin={isAdmin}
+      />
+    </StudentAppLayout>
   );
 }

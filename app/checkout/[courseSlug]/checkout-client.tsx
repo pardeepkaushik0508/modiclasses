@@ -662,9 +662,9 @@ export default function CheckoutClient({
          ======================================================== */}
       {isPaymentModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-150">
+          <div className="bg-white rounded-3xl border border-slate-200 w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in zoom-in-95 duration-150">
             {/* Gateway Header */}
-            <div className="bg-[#0b192e] text-white p-5 flex items-center justify-between">
+            <div className="bg-[#0b192e] text-white p-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm shadow">
                   FE
@@ -683,21 +683,21 @@ export default function CheckoutClient({
             </div>
 
             {/* Payable Amount Highlight */}
-            <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
+            <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs shrink-0">
               <span className="font-bold text-slate-600">Total Payable:</span>
               <span className="text-xl font-black text-[#003366]">₹{finalAmount}</span>
             </div>
 
             {/* Mode Simulator Alert */}
-            <div className="p-3 bg-amber-50 border-b border-amber-200 text-amber-900 text-[11px] flex items-center gap-2">
+            <div className="p-3 bg-amber-50 border-b border-amber-200 text-amber-900 text-[11px] flex items-center gap-2 shrink-0">
               <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
               <span>
                 <strong>Secure Payment Simulator Mode:</strong> Ready to verify course enrollment, atomic coupon redemption, and study materials unlocking.
               </span>
             </div>
 
-            {/* Method Selection Tabs */}
-            <div className="p-5 space-y-4 text-xs">
+            {/* Method Selection Tabs & Content */}
+            <div className="p-5 space-y-4 text-xs overflow-y-auto flex-1">
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"

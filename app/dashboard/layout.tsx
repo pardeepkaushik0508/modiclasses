@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import StudentAppLayout from "@/components/layout/student-app-layout";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +17,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased">
+    <StudentAppLayout>
       {children}
-    </div>
+    </StudentAppLayout>
   );
 }

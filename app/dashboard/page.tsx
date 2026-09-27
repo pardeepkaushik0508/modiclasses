@@ -75,54 +75,8 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8fafc]">
-      {/* Top RDSO CBT Header */}
-      <header className="bg-[#e2e8f0] border-b-2 border-[#cbd5e1] px-4 py-2.5 shadow-sm sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-[#0284c7] flex items-center justify-center text-white font-bold text-lg shadow">
-                FE
-              </div>
-              <div>
-                <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-none">
-                  PI EDUCATION • STUDENT CBT PORTAL
-                </h1>
-                <p className="text-xs text-slate-600 font-medium mt-1">
-                  Indian Railways RDSO Psycho Aptitude Exam Engine
-                </p>
-              </div>
-            </Link>
-          </div>
-
-          {/* User Details & Sign Out */}
-          <div className="flex items-center gap-3 text-xs sm:text-sm">
-            <div className="hidden sm:flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-300">
-              <span className="text-slate-500 font-medium">Roll No:</span>
-              <span className="font-mono font-bold text-[#0284c7]">
-                {user?.rollNo || "NOT-ASSIGNED"}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-lg font-semibold text-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>{user?.role || "STUDENT"}</span>
-            </div>
-
-            <button
-              onClick={() => signOut({ callbackUrl: "/login" })}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium text-xs transition-colors cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-6">
-        {/* Candidate Profile Summary Banner */}
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+      {/* Candidate Profile Summary Banner */}
         <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-start gap-4">
@@ -223,7 +177,6 @@ export default function DashboardPage() {
             ))}
           </div>
         </section>
-      </main>
     </div>
   );
 }
