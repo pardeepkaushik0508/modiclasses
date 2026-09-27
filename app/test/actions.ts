@@ -101,6 +101,75 @@ export async function submitTestAttemptAction(
       };
     }
 
+    // SECURITY ACCESS GUARD: If test is linked to a course and is not a free trial, verify candidate enrollment
+    const isFreeTrial = Boolean((test as any).isFreeTrial);
+    if (test.courseId && !isFreeTrial) {
+      let activeSession = null;
+      try {
+        activeSession = await getServerSession(authOptions);
+      } catch {
+        // Outside active session
+      }
+
+      if (!activeSession?.user?.id) {
+        return {
+          success: false,
+          error: "Course enrollment required. Please log in and enroll to attempt this test.",
+          totalQuestions: 0,
+          attemptedCount: 0,
+          unattemptedCount: 0,
+          correctCount: 0,
+          incorrectCount: 0,
+          rawScore: 0,
+          totalMarks: 0,
+          percentage: 0,
+          tScore: 0,
+          passingScore: 42.0,
+          isQualified: false,
+          questionReviews: [],
+        };
+      }
+
+      if (activeSession.user.role !== Role.ADMIN) {
+        const [enrollment, successOrder] = await Promise.all([
+          prisma.enrollment.findUnique({
+            where: {
+              userId_courseId: {
+                userId: activeSession.user.id,
+                courseId: test.courseId,
+              },
+            },
+          }),
+          prisma.order.findFirst({
+            where: {
+              userId: activeSession.user.id,
+              courseId: test.courseId,
+              status: "SUCCESS",
+            },
+          }),
+        ]);
+
+        if (!enrollment && !successOrder) {
+          return {
+            success: false,
+            error: "Course enrollment required. Please complete course enrollment to attempt this test.",
+            totalQuestions: 0,
+            attemptedCount: 0,
+            unattemptedCount: 0,
+            correctCount: 0,
+            incorrectCount: 0,
+            rawScore: 0,
+            totalMarks: 0,
+            percentage: 0,
+            tScore: 0,
+            passingScore: 42.0,
+            isQualified: false,
+            questionReviews: [],
+          };
+        }
+      }
+    }
+
     // Collect all questions across sections
     const allQuestions = test.sections.flatMap((s) => s.questions);
     const totalQuestions = allQuestions.length;
@@ -182,24 +251,11 @@ export async function submitTestAttemptAction(
     } catch {
       // Outside of active Next.js request context (e.g. testing / scripts)
     }
-    let candidateUserId: string | null = session?.user?.id || null;
+    const candidateUserId: string | null = session?.user?.id || null;
 
-    if (!candidateUserId) {
-      // If guest trial, associate with default student demo account
-      const defaultStudent = await prisma.user.findFirst({
-        where: { role: Role.STUDENT },
-      });
-      if (defaultStudent) {
-        candidateUserId = defaultStudent.id;
-      } else {
-        // Fallback to any user
-        const anyUser = await prisma.user.findFirst();
-        candidateUserId = anyUser?.id || null;
-      }
-    }
-
-    // 5. Transactionally persist TestAttempt and UserResponse records
-    let attemptId = `mock-${Date.now()}`;
+    // 5. Transactionally persist TestAttempt and UserResponse records ONLY for authenticated candidates
+    // SECURITY: Unauthenticated / guest trial candidates receive in-memory calculated scorecards without database pollution or student impersonation
+    let attemptId = `guest-trial-${Date.now()}`;
     if (candidateUserId) {
       const attempt = await prisma.$transaction(async (tx) => {
         const att = await tx.testAttempt.create({

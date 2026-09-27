@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log("==========================================================");
-  console.log("🚀 [Five Education] Starting Database Verification & Seeding");
+  console.log("🚀 [PI EDUCATION] Starting Database Verification & Seeding");
   console.log("==========================================================");
 
   // 1. Verify Active PostgreSQL Connection
@@ -43,7 +43,7 @@ async function main() {
       where: { id: existingAdmin.id },
       data: {
         email: adminEmail,
-        name: "Five Education Administrator",
+        name: "PI EDUCATION Administrator",
         role: Role.ADMIN,
         passwordHash: adminPasswordHash,
         avatarUrl: "/avatars/admin-avatar.svg",
@@ -52,7 +52,7 @@ async function main() {
   } else {
     adminUser = await prisma.user.create({
       data: {
-        name: "Five Education Administrator",
+        name: "PI EDUCATION Administrator",
         email: adminEmail,
         phone: "+919876543210",
         passwordHash: adminPasswordHash,
@@ -277,23 +277,47 @@ async function main() {
     console.log(`✅ Test already exists with ID: ${existingTest.id}`);
   }
 
-  // 6. Create Demo Order for Student
-  const existingOrder = await prisma.order.findFirst({
-    where: { userId: studentUser.id, courseId: course.id },
-  });
+  // 6. Demo Student starts with 0 enrolled courses (Paywall Enforcement Ready)
+  console.log("ℹ️  Demo student initialized with 0 enrolled courses (Paywall Active)");
 
-  if (!existingOrder) {
-    await prisma.order.create({
-      data: {
-        userId: studentUser.id,
-        courseId: course.id,
-        gatewayOrderId: "order_mock_9823471023",
-        amount: 899.00,
-        status: OrderStatus.SUCCESS,
-      },
+
+  // 7. Seed Default Promotional Coupons
+  const defaultCoupons = [
+    {
+      code: "RRB2026",
+      discountType: "PERCENTAGE" as const,
+      discountValue: 20,
+      minOrderAmount: 499,
+      maxDiscountAmount: 400,
+      usageLimit: 500,
+      isPublished: true,
+    },
+    {
+      code: "FIRST50",
+      discountType: "FLAT" as const,
+      discountValue: 50,
+      minOrderAmount: 299,
+      usageLimit: 1000,
+      isPublished: true,
+    },
+    {
+      code: "SUPER100",
+      discountType: "FLAT" as const,
+      discountValue: 100,
+      minOrderAmount: 699,
+      usageLimit: 250,
+      isPublished: true,
+    },
+  ];
+
+  for (const c of defaultCoupons) {
+    await prisma.coupon.upsert({
+      where: { code: c.code },
+      update: {},
+      create: c,
     });
-    console.log("✅ Demo student enrollment/order created successfully");
   }
+  console.log("✅ Default coupons seeded (RRB2026, FIRST50, SUPER100)");
 
   console.log("==========================================================");
   console.log("🎉 Seeding completed successfully!");

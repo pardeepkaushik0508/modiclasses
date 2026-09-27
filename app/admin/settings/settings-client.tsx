@@ -247,7 +247,7 @@ export default function SettingsClient({ initialSettings }: SettingsClientProps)
                 type="text"
                 value={formData.mentorshipName}
                 onChange={(e) => setFormData({ ...formData, mentorshipName: e.target.value })}
-                placeholder="Five Education Close Group (Exclusive Mentorship)"
+                placeholder="PI EDUCATION Close Group (Exclusive Mentorship)"
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50/50 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500 transition-all"
               />
             </div>

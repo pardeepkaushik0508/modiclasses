@@ -109,7 +109,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-[#f1f5f9] to-slate-200 flex flex-col justify-center items-center px-4 py-12">
       <div className="w-full max-w-lg">
-        {/* Five Education Themed Card */}
+        {/* PI EDUCATION Themed Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden backdrop-blur-sm">
           {/* Header Ribbon */}
           <div className="bg-gradient-to-r from-[#0284c7] via-[#0369a1] to-[#0f172a] p-6 text-white text-center relative">
@@ -137,7 +137,7 @@ export default function RegisterPage() {
                 <div>
                   <h3 className="text-xl font-bold text-slate-900">Registration Successful!</h3>
                   <p className="text-xs text-slate-600 mt-1 max-w-sm mx-auto">
-                    Welcome to Five Education, <span className="font-semibold text-slate-800">{registeredUser.name}</span>!
+                    Welcome to PI EDUCATION, <span className="font-semibold text-slate-800">{registeredUser.name}</span>!
                     Your official RDSO CBT roll number has been generated.
                   </p>
                 </div>
@@ -346,7 +346,7 @@ export default function RegisterPage() {
                 {/* Switch to Login */}
                 <div className="text-center pt-2 border-t border-slate-200">
                   <p className="text-xs text-slate-600">
-                    Already registered for Five Education CBT?{" "}
+                    Already registered for PI EDUCATION CBT?{" "}
                     <Link
                       href="/login"
                       className="font-semibold text-[#0284c7] hover:text-[#0369a1] hover:underline"
@@ -362,7 +362,7 @@ export default function RegisterPage() {
       </div>
 
       <footer className="mt-8 text-center text-xs text-slate-500 space-y-1">
-        <p>&copy; {new Date().getFullYear()} Five Education • RDSO Railway Psycho CBT Engine</p>
+        <p>&copy; {new Date().getFullYear()} PI EDUCATION • RDSO Railway Psycho CBT Engine</p>
         <p>Aptitude Batteries for Indian Railways RRB Assistant Loco Pilot & Station Master</p>
       </footer>
     </div>

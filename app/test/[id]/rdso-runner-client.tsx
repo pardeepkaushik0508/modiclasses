@@ -147,7 +147,7 @@ export interface QuestionData {
   questionImageUrl?: string | null;
   imageUrl?: string | null;
   optionsJson: any; // [{ id: "A", label: "A", image?: string }]
-  correctOption: string;
+  correctOption?: string;
   marks: number;
 }
 
@@ -835,7 +835,7 @@ export function OptionFigureRenderer({
     <RDSOOptionShape
       questionNo={questionNo}
       optionId={optionId}
-      isCorrect={optionId === correctOption}
+      isCorrect={Boolean(correctOption && optionId === correctOption)}
       className="w-full h-full object-contain"
     />
   );
@@ -1111,9 +1111,8 @@ export default function RDSOExamRunnerClient({
 
   return (
     <div
-      className={`min-h-screen bg-[#f1f5f9] select-none text-slate-800 font-sans flex flex-col ${
-        zoomLevel === "80" ? "origin-top scale-[0.85] w-[117.6%]" : "w-full"
-      } transition-transform duration-150`}
+      className={`min-h-screen bg-[#f1f5f9] select-none text-slate-800 font-sans flex flex-col ${zoomLevel === "80" ? "origin-top scale-[0.85] w-[117.6%]" : "w-full"
+        } transition-transform duration-150`}
     >
       {/* Toast Notification */}
       {savedNotification && (
@@ -1134,7 +1133,7 @@ export default function RDSOExamRunnerClient({
             <IndianRailwaysEmblem className="w-11 h-11 shrink-0 drop-shadow-xs" />
             <div className="flex flex-col">
               <span className="text-xs sm:text-sm font-extrabold text-[#003366] tracking-tight leading-none uppercase">
-                Five Education • RDSO CBT Engine
+                PI EDUCATION • RDSO CBT Engine
               </span>
               <span className="text-[10px] text-slate-600 font-bold mt-1">
                 Indian Railways Aptitude Assessment System
@@ -1169,11 +1168,10 @@ export default function RDSOExamRunnerClient({
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
           {/* Digital Timer */}
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded font-mono font-bold tracking-wider text-sm shadow-inner transition-colors ${
-              isTimeCritical
+            className={`flex items-center gap-2 px-3 py-1.5 rounded font-mono font-bold tracking-wider text-sm shadow-inner transition-colors ${isTimeCritical
                 ? "bg-rose-600 text-white animate-pulse"
                 : "bg-[#0284c7] text-white"
-            }`}
+              }`}
           >
             <Clock className="w-4 h-4 text-sky-200" />
             <span>
@@ -1232,22 +1230,20 @@ export default function RDSOExamRunnerClient({
               <span className="text-slate-400 mr-1.5 hidden md:inline">Zoom:</span>
               <button
                 onClick={() => setZoomLevel("80")}
-                className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
-                  zoomLevel === "80"
+                className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${zoomLevel === "80"
                     ? "bg-[#0284c7] text-white"
                     : "text-slate-300 hover:text-white"
-                }`}
+                  }`}
               >
                 80%
               </button>
               <span className="text-slate-500 mx-1">|</span>
               <button
                 onClick={() => setZoomLevel("100")}
-                className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
-                  zoomLevel === "100"
+                className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${zoomLevel === "100"
                     ? "bg-[#0284c7] text-white"
                     : "text-slate-300 hover:text-white"
-                }`}
+                  }`}
               >
                 100%
               </button>
@@ -1306,11 +1302,10 @@ export default function RDSOExamRunnerClient({
                 key={tab.id}
                 type="button"
                 onClick={() => handleTabClick(tab.id)}
-                className={`px-3.5 py-1.5 text-xs font-bold rounded-t whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer ${
-                  isActive
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-t whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer ${isActive
                     ? "bg-[#0284c7] text-white shadow-xs"
                     : "bg-slate-200 text-slate-700 border border-slate-300 hover:bg-slate-100"
-                }`}
+                  }`}
               >
                 <span>{tab.label}</span>
                 {isActive && (
@@ -1549,11 +1544,10 @@ export default function RDSOExamRunnerClient({
 
                               {/* Circular Radio Dot Only (RDSO Standard) */}
                               <div
-                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                                  isSelected
+                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
                                     ? "border-[#003366] bg-white"
                                     : "border-slate-400 bg-white"
-                                }`}
+                                  }`}
                               >
                                 {isSelected && (
                                   <div className="w-2.5 h-2.5 rounded-full bg-[#003366]" />
@@ -1746,11 +1740,10 @@ export default function RDSOExamRunnerClient({
 
             {/* Qualification Banner */}
             <div
-              className={`p-4 rounded-xl border flex items-center justify-between text-xs font-bold ${
-                submissionResult.isQualified
+              className={`p-4 rounded-xl border flex items-center justify-between text-xs font-bold ${submissionResult.isQualified
                   ? "bg-emerald-50 border-emerald-300 text-emerald-900"
                   : "bg-rose-50 border-rose-300 text-rose-900"
-              }`}
+                }`}
             >
               <div className="flex items-center gap-2">
                 {submissionResult.isQualified ? (
@@ -1771,11 +1764,10 @@ export default function RDSOExamRunnerClient({
               </div>
 
               <span
-                className={`text-sm font-black px-3 py-1 rounded-full ${
-                  submissionResult.isQualified
+                className={`text-sm font-black px-3 py-1 rounded-full ${submissionResult.isQualified
                     ? "bg-emerald-600 text-white"
                     : "bg-rose-600 text-white"
-                }`}
+                  }`}
               >
                 {submissionResult.isQualified ? "PASS" : "FAIL"}
               </span>

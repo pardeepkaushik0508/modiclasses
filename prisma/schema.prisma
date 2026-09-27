@@ -42,6 +42,11 @@ enum OrderStatus {
   FAILED
 }
 
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
 enum AttemptStatus {
   IN_PROGRESS
   COMPLETED
@@ -66,6 +71,8 @@ model User {
 
   orders       Order[]
   attempts     TestAttempt[]
+  enrollments  Enrollment[]
+  couponUsages CouponUsage[]
 
   @@map("users")
 }
@@ -88,6 +95,7 @@ model Course {
   studyMaterials  StudyMaterial[]
   orders          Order[]
   tests           Test[]
+  enrollments     Enrollment[]
 
   @@map("courses")
 }
@@ -120,19 +128,27 @@ model StudyMaterial {
 }
 
 model Order {
-  id             String      @id @default(cuid())
+  id             String        @id @default(cuid())
   userId         String
   courseId       String
   gatewayOrderId String?
-  amount         Float
-  status         OrderStatus @default(PENDING)
-  createdAt      DateTime    @default(now())
+  amount         Float         @default(0)
+  baseAmount     Float         @default(0)
+  discountAmount Float         @default(0)
+  finalAmount    Float         @default(0)
+  status         OrderStatus   @default(PENDING)
+  couponId       String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now()) @updatedAt
 
-  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course         Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  coupon         Coupon?       @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  couponUsages   CouponUsage[]
 
   @@index([userId])
   @@index([courseId])
+  @@index([couponId])
   @@map("orders")
 }
 
@@ -244,5 +260,56 @@ model SiteSetting {
   updatedAt DateTime @updatedAt
 
   @@map("site_settings")
+}
+
+model Coupon {
+  id                String       @id @default(cuid())
+  code              String       @unique
+  discountType      DiscountType @default(PERCENTAGE)
+  discountValue     Float
+  minOrderAmount    Float        @default(0)
+  maxDiscountAmount Float?
+  validUntil        DateTime?
+  usageLimit        Int?
+  isPublished       Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  usages            CouponUsage[]
+  orders            Order[]
+
+  @@map("coupons")
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  userId    String
+  orderId   String?
+  usedAt    DateTime @default(now())
+
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@unique([couponId, userId])
+  @@index([couponId])
+  @@index([userId])
+  @@map("coupon_usages")
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@map("enrollments")
 }
 

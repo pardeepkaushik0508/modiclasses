@@ -22,7 +22,7 @@ export const DEFAULT_GROUP_SETTINGS: GroupSettings = {
   whatsappDescription:
     "High-focus group for Station Master aspirants targeting 42+ T-Score in every battery with daily peer quizzes.",
   mentorshipLink: "https://t.me/+FiveEducationExclusiveMentors",
-  mentorshipName: "Five Education Close Group (Exclusive Mentorship)",
+  mentorshipName: "PI EDUCATION Close Group (Exclusive Mentorship)",
   mentorshipDescription:
     "Direct 1-on-1 faculty assistance with Ex-RDSO mentors, individualized scorecards, and live strategy audio rooms.",
 };

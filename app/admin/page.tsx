@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Admin Dashboard | Five Education",
+  title: "Admin Dashboard | PI EDUCATION",
   description: "Overview of platform metrics, active courses, RDSO tests, and students.",
 };
 
@@ -102,7 +102,7 @@ export default async function AdminDashboardPage() {
               <span>RBAC Engine Guard Active • Role: ADMIN</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Five Education LMS Administrator Console
+              PI EDUCATION LMS Administrator Console
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
               Dynamically manage candidate courses, create single-page RDSO psycho memory tests,
@@ -196,11 +196,10 @@ export default async function AdminDashboardPage() {
                   </div>
 
                   <span
-                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                      c.isPublished
+                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${c.isPublished
                         ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                         : "bg-slate-100 text-slate-600 border border-slate-200"
-                    }`}
+                      }`}
                   >
                     {c.isPublished ? "Live" : "Draft"}
                   </span>
@@ -249,7 +248,7 @@ export default async function AdminDashboardPage() {
                   </div>
 
                   <Link
-                    href={`/test/${t.slug}?trial=true`}
+                    href={`/test/${t.slug}`}
                     className="p-1.5 rounded-lg bg-white border border-slate-200 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-300 text-slate-600 transition-colors"
                     title="Launch CBT Preview"
                   >

@@ -137,7 +137,7 @@ async function seedAuxiliaryData() {
       courseId: (course2 || course1).id,
     },
     {
-      title: "RDSO Psycho CBT 2026 Strategy: Cutoff Secrets & Sectional Qualifying Rules (35 Mins • Five Education)",
+      title: "RDSO Psycho CBT 2026 Strategy: Cutoff Secrets & Sectional Qualifying Rules (35 Mins • PI EDUCATION)",
       fileUrl: "https://www.youtube.com/watch?v=kXYiU_JCYtU",
       fileType: "VIDEO",
       isFree: true,

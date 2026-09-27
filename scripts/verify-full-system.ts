@@ -1,5 +1,5 @@
 /**
- * Five Education LMS - Full System Verification Suite
+ * PI EDUCATION LMS - Full System Verification Suite
  * 
  * Verifies:
  * 1. RDSO CBT Test Runner & Asset Integrity (app/test/[id]/rdso-runner-client.tsx)
@@ -63,7 +63,7 @@ function httpGet(url: string, headers: Record<string, string> = {}): Promise<{ s
 async function runFullSystemVerification() {
   const startTime = Date.now();
   console.log("\n" + "=".repeat(78));
-  console.log("  🚆 FIVE EDUCATION LMS - PRINCIPAL QA FULL SYSTEM AUTOMATION SUITE");
+  console.log("  🚆 PI EDUCATION LMS - PRINCIPAL QA FULL SYSTEM AUTOMATION SUITE");
   console.log("  Target: Verification of Recent Fixes, RDSO CBT Runner & Core Flows");
   console.log("=".repeat(78) + "\n");
 
@@ -221,7 +221,7 @@ async function runFullSystemVerification() {
     !runnerCode.includes('isSelected ? "bg-[#003366]') &&
     !runnerCode.includes('isSelected ? "bg-blue-') &&
     !runnerCode.includes('isSelected ? "bg-sky-');
-  
+
   // Ensure the circular radio dot fills
   const radioDotFills =
     runnerCode.includes("isSelected && (") &&

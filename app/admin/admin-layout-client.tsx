@@ -18,6 +18,7 @@ import {
   ChevronRight,
   Settings,
   Target,
+  Tag,
 } from "lucide-react";
 import type { Session } from "next-auth";
 
@@ -94,6 +95,12 @@ export default function AdminLayoutClient({
       exact: false,
     },
     {
+      label: "Coupons & Discounts",
+      href: "/admin/coupons",
+      icon: Tag,
+      exact: false,
+    },
+    {
       label: "Community Settings",
       href: "/admin/settings",
       icon: Settings,
@@ -107,9 +114,8 @@ export default function AdminLayoutClient({
           1. DEEP NAVY ADMIN SIDEBAR (#0b192e)
          ======================================================== */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0b192e] text-slate-300 border-r border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } shadow-2xl lg:shadow-none lg:static`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0b192e] text-slate-300 border-r border-slate-800 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } shadow-2xl lg:shadow-none lg:static`}
       >
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {/* Branding Header with Pi Crest Emblem */}
@@ -118,7 +124,7 @@ export default function AdminLayoutClient({
               <PiEducationCrest className="w-10 h-10 shrink-0 drop-shadow-md group-hover:scale-105 transition-transform" />
               <div className="flex flex-col">
                 <span className="text-sm font-black text-white tracking-tight leading-none">
-                  FIVE EDUCATION
+                  PI EDUCATION
                 </span>
                 <div className="flex items-center gap-1.5 mt-1.5">
                   <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 uppercase tracking-wider">
@@ -162,11 +168,10 @@ export default function AdminLayoutClient({
                   key={item.href}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-all ${
-                    isActive
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-all ${isActive
                       ? "bg-white/10 text-white font-medium shadow-sm border border-white/10"
                       : "text-slate-300 hover:text-white hover:bg-white/5"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-amber-400" : "text-slate-400"}`} />
@@ -203,7 +208,7 @@ export default function AdminLayoutClient({
                     F
                   </span>
                   <span className="text-[9px] text-slate-400 font-medium">
-                    Five Education
+                    PI EDUCATION
                   </span>
                 </div>
               </div>
@@ -267,7 +272,7 @@ export default function AdminLayoutClient({
 
           <div className="flex items-center gap-3">
             <Link
-              href="/test/rdso-memory-figure-test-01?trial=true"
+              href="/test/trial"
               target="_blank"
               className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-50 border border-sky-200 text-[#003366] text-xs font-semibold hover:bg-sky-100 transition-colors"
             >

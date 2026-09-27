@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import MaterialsClient from "./materials-client";
 
 export const metadata = {
-  title: "Uploaded Materials | Admin Console - Five Education",
+  title: "Uploaded Materials | Admin Console - PI EDUCATION",
   description: "Manage PDFs, notes, and study material files for courses.",
 };
 

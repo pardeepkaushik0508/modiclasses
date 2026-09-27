@@ -6,7 +6,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Five Education | RDSO Railway Psycho CBT Test Engine & LMS",
+  title: "PI EDUCATION | RDSO Railway Psycho CBT Test Engine & LMS",
   description:
     "Next-generation RDSO Railway Psycho CBT Test Engine and Learning Management System for Indian Railways RRB ALP, Station Master (SM), and Aptitude Batteries.",
   keywords: [
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "RRB ALP",
     "Station Master",
     "CBT Test Engine",
-    "Five Education",
+    "PI EDUCATION",
     "Memory Test",
     "T-Score",
   ],

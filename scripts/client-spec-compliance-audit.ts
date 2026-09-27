@@ -1,9 +1,9 @@
 /**
- * Five Education LMS - Client Specification Compliance & UI/UX Audit
+ * PI EDUCATION LMS - Client Specification Compliance & UI/UX Audit
  * 
  * Exhaustive Verification against Foundational Client Specification Documents:
  * - Document 1: RDSO Psycho CBT Engine Specifications
- * - Document 2: Five Education LMS Portal Layout & Design
+ * - Document 2: PI EDUCATION LMS Portal Layout & Design
  * 
  * Execution: npx tsx scripts/client-spec-compliance-audit.ts
  */
@@ -76,7 +76,7 @@ function httpGet(
 async function runComplianceAudit() {
   const startTime = Date.now();
   console.log("\n" + "=".repeat(80));
-  console.log("  🚆 FIVE EDUCATION LMS - CLIENT SPECIFICATION COMPLIANCE & UI/UX AUDIT");
+  console.log("  🚆 PI EDUCATION LMS - CLIENT SPECIFICATION COMPLIANCE & UI/UX AUDIT");
   console.log("  Foundational Standards: Document 1 (RDSO CBT Engine) & Document 2 (LMS Portal)");
   console.log("=".repeat(80) + "\n");
 
@@ -308,9 +308,9 @@ async function runComplianceAudit() {
   );
 
   // =========================================================================
-  // 2. DOCUMENT 2: FIVE EDUCATION LMS PORTAL LAYOUT & DESIGN
+  // 2. DOCUMENT 2: PI EDUCATION LMS PORTAL LAYOUT & DESIGN
   // =========================================================================
-  console.log("\n\x1b[1m\x1b[34m[2/5] AUDITING DOCUMENT 2: Five Education LMS Portal Layout & Design\x1b[0m");
+  console.log("\n\x1b[1m\x1b[34m[2/5] AUDITING DOCUMENT 2: PI EDUCATION LMS Portal Layout & Design\x1b[0m");
 
   const lmsClientPath = path.resolve(process.cwd(), "app/dashboard-client.tsx");
   const lmsCode = fs.existsSync(lmsClientPath) ? fs.readFileSync(lmsClientPath, "utf8") : "";
@@ -352,7 +352,7 @@ async function runComplianceAudit() {
   const hasBottomBadge =
     lmsCode.includes("Learn Today") &&
     lmsCode.includes("Lead Tomorrow") &&
-    lmsCode.includes("Five Education");
+    lmsCode.includes("PI EDUCATION");
   recordAudit(
     "d2-sidebar-nav-items",
     "DOC_2_LMS",
@@ -363,7 +363,7 @@ async function runComplianceAudit() {
   );
 
   // 2.3 Center Column: Welcome Hero, Featured Cards, Refer & Earn, "Our Courses"
-  const hasWelcomeGreeting = lmsCode.includes("Welcome to") && lmsCode.includes("Five Education");
+  const hasWelcomeGreeting = lmsCode.includes("Welcome to") && lmsCode.includes("PI EDUCATION");
   const hasSubheading = lmsCode.includes("Your Preparation • Our Support • Your Success");
   const hasFeaturedCards =
     lmsCode.includes("Course No. {idx + 1}") &&

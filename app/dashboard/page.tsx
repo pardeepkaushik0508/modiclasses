@@ -86,7 +86,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-none">
-                  FIVE EDUCATION • STUDENT CBT PORTAL
+                  PI EDUCATION • STUDENT CBT PORTAL
                 </h1>
                 <p className="text-xs text-slate-600 font-medium mt-1">
                   Indian Railways RDSO Psycho Aptitude Exam Engine
@@ -178,7 +178,7 @@ export default function DashboardPage() {
               </p>
             </div>
             <Link
-              href="/test/rdso-memory-figure-test-01?trial=true"
+              href="/test/trial"
               className="text-xs font-semibold text-[#0284c7] hover:underline flex items-center gap-1"
             >
               <span>Test Engine Demo</span>
@@ -212,7 +212,7 @@ export default function DashboardPage() {
                     <strong className="text-emerald-700">{battery.scoreCutoff}</strong>
                   </div>
                   <Link
-                    href={battery.id === "MEMORY_FIGURE" ? "/test/rdso-memory-figure-test-01" : "/test/rdso-memory-figure-test-01?trial=true"}
+                    href={battery.id === "MEMORY_FIGURE" ? "/test/rdso-memory-figure-test-01" : "/test/trial"}
                     className="inline-flex items-center gap-1 font-semibold text-[#0284c7] hover:text-[#0369a1]"
                   >
                     <span>Launch</span>

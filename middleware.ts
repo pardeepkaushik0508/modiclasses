@@ -5,13 +5,14 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
-  const isTrial = req.nextUrl.searchParams.get("trial") === "true";
+  // Dedicated public free trial path: strictly exempt only /test/trial without query-param bypass
+  const isPublicTrial = pathname === "/test/trial" || pathname.startsWith("/test/trial/");
 
   // Protected paths check
   const isProtectedPath =
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/admin") ||
-    (pathname.startsWith("/test") && !isTrial) ||
+    (pathname.startsWith("/test") && !isPublicTrial) ||
     pathname.startsWith("/checkout");
 
   if (isProtectedPath) {

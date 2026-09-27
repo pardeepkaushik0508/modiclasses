@@ -195,6 +195,7 @@ interface DashboardClientProps {
   progressPercentage: number;
   completedCount: number;
   totalTestsCount: number;
+  enrolledCourseIds?: string[];
   session: Session | null;
 }
 
@@ -205,6 +206,7 @@ export default function DashboardClient({
   progressPercentage,
   completedCount,
   totalTestsCount,
+  enrolledCourseIds = [],
   session: initialSession,
 }: DashboardClientProps) {
   const { data: clientSession, status } = useSession();
@@ -353,7 +355,7 @@ export default function DashboardClient({
                 </div>
                 <div className="flex flex-col">
                   <span className="text-base font-extrabold text-white tracking-tight leading-none">
-                    Five Education
+                    PI EDUCATION
                   </span>
                 </div>
               </Link>
@@ -384,7 +386,7 @@ export default function DashboardClient({
               </Link>
 
               <Link
-                href="/test/rdso-memory-figure-test-01?trial=true"
+                href="/test/trial"
                 onClick={() => {
                   setActiveNav("Test");
                   setSidebarOpen(false);
@@ -460,7 +462,7 @@ export default function DashboardClient({
               </button>
 
               <Link
-                href="/test/rdso-memory-figure-test-01?trial=true"
+                href="/test/trial"
                 className="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all"
               >
                 <div className="flex items-center gap-3.5">
@@ -554,7 +556,7 @@ export default function DashboardClient({
                     F
                   </span>
                   <span className="text-[9px] text-slate-400 font-medium">
-                    Five Education
+                    PI EDUCATION
                   </span>
                 </div>
               </div>
@@ -589,7 +591,7 @@ export default function DashboardClient({
                     F
                   </div>
                   <span className="text-base font-extrabold text-slate-900 tracking-tight">
-                    Five Education
+                    PI EDUCATION
                   </span>
                 </div>
               </div>
@@ -829,7 +831,7 @@ export default function DashboardClient({
                 {/* Welcome Greeting */}
                 <div className="space-y-1">
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    Welcome to <span className="text-[#1d4ed8]">Five Education</span>
+                    Welcome to <span className="text-[#1d4ed8]">PI EDUCATION</span>
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-500 font-medium">
                     Your Preparation • Our Support • Your Success
@@ -869,13 +871,23 @@ export default function DashboardClient({
                         </div>
 
                         <div className="pt-4 flex items-end justify-between z-10">
-                          <Link
-                            href="/test/rdso-memory-figure-test-01?trial=true"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#facc15] hover:bg-[#eab308] text-slate-950 font-bold text-xs shadow transition-colors"
-                          >
-                            <span>Start Now</span>
-                            <ChevronRight className="w-3.5 h-3.5" />
-                          </Link>
+                          {enrolledCourseIds.includes(course.id) ? (
+                            <Link
+                              href="/study-material"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs shadow transition-colors"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5 text-slate-950" />
+                              <span>Enrolled • Go to Course</span>
+                            </Link>
+                          ) : (
+                            <Link
+                              href={`/checkout/${course.slug}`}
+                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#facc15] hover:bg-[#eab308] text-slate-950 font-bold text-xs shadow transition-colors"
+                            >
+                              <span>Enroll Now</span>
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            </Link>
+                          )}
 
                           <div className="w-32 h-24 shrink-0 -mr-2 -mb-2">
                             {isCourse1 ? (
@@ -1007,18 +1019,28 @@ export default function DashboardClient({
                           </div>
 
                           <div className="pt-4 flex items-end justify-between">
-                            <Link
-                              href="/test/rdso-memory-figure-test-01?trial=true"
-                              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-white font-bold text-xs shadow-xs transition-colors ${isBlueTheme
-                                ? "bg-[#1d4ed8] hover:bg-blue-700"
-                                : isGreenTheme
-                                  ? "bg-[#059669] hover:bg-emerald-700"
-                                  : "bg-purple-700 hover:bg-purple-800"
-                                }`}
-                            >
-                              <span>Explore Course</span>
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            </Link>
+                            {enrolledCourseIds.includes(course.id) ? (
+                              <Link
+                                href="/study-material"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Enrolled • Go to Course</span>
+                              </Link>
+                            ) : (
+                              <Link
+                                href={`/checkout/${course.slug}`}
+                                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-white font-bold text-xs shadow-xs transition-colors ${isBlueTheme
+                                  ? "bg-[#1d4ed8] hover:bg-blue-700"
+                                  : isGreenTheme
+                                    ? "bg-[#059669] hover:bg-emerald-700"
+                                    : "bg-purple-700 hover:bg-purple-800"
+                                  }`}
+                              >
+                                <span>Enroll Now</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                              </Link>
+                            )}
                             <div className="w-24 h-16 shrink-0">
                               {isBlueTheme ? (
                                 <IndianRailwaysLocomotiveIllustration className="w-full h-full" />
@@ -1137,7 +1159,7 @@ export default function DashboardClient({
 
                   <div className="space-y-2">
                     <Link
-                      href="/test/rdso-memory-figure-test-01?trial=true"
+                      href="/test/trial"
                       className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors group"
                     >
                       <div className="flex items-center gap-3">
@@ -1231,7 +1253,7 @@ export default function DashboardClient({
 
                   <div className="pt-1">
                     <Link
-                      href="/test/rdso-memory-figure-test-01?trial=true"
+                      href="/test/trial"
                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#1d4ed8] hover:bg-blue-700 text-white text-[11px] font-bold shadow-xs transition-colors"
                     >
                       <span>Start Now</span>
@@ -1302,7 +1324,7 @@ export default function DashboardClient({
           {/* 5. FOOTER */}
           <footer className="bg-transparent border-t border-slate-200/60 py-4 px-4 sm:px-8 mt-auto text-[11px] text-slate-500">
             <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p>&copy; {new Date().getFullYear()} Five Education. All rights reserved.</p>
+              <p>&copy; {new Date().getFullYear()} PI EDUCATION. All rights reserved.</p>
               <div className="flex items-center gap-4 text-slate-600">
                 <Link href="/" className="hover:text-slate-900">Help</Link>
                 <span>|</span>
@@ -1336,7 +1358,7 @@ export default function DashboardClient({
 
             <div className="p-6 space-y-4 text-xs text-slate-600">
               <p>
-                Share your personal Five Education referral link with fellow RRB aspirants. When they join, both of you receive <strong>5 Free Psycho Mock Tests</strong> and <strong>₹200 Course Credits</strong>.
+                Share your personal PI EDUCATION referral link with fellow RRB aspirants. When they join, both of you receive <strong>5 Free Psycho Mock Tests</strong> and <strong>₹200 Course Credits</strong>.
               </p>
 
               <div className="space-y-1.5">
@@ -1394,7 +1416,7 @@ export default function DashboardClient({
 
             <div className="p-6 space-y-4 text-xs text-slate-600">
               <p>
-                The <strong>Five Education Close Group</strong> is an invite-only cohort reserved for candidates preparing for Indian Railways RRB ALP & Station Master Aptitude batteries.
+                The <strong>PI EDUCATION Close Group</strong> is an invite-only cohort reserved for candidates preparing for Indian Railways RRB ALP & Station Master Aptitude batteries.
               </p>
 
               <div className="bg-rose-50 border border-rose-200 rounded-xl p-3.5 space-y-2 text-rose-900">

@@ -49,14 +49,33 @@ export default async function HomePage() {
 
   let progressPercentage = 35; // Default reference preview mode
   let completedCount = 0;
+  let enrolledCourseIds: string[] = [];
 
   if (session?.user?.id) {
-    completedCount = await prisma.testAttempt.count({
-      where: {
-        userId: session.user.id,
-        status: "COMPLETED",
-      },
-    });
+    const [completedAttempts, enrollments, successOrders] = await Promise.all([
+      prisma.testAttempt.count({
+        where: {
+          userId: session.user.id,
+          status: "COMPLETED",
+        },
+      }),
+      prisma.enrollment.findMany({
+        where: { userId: session.user.id },
+        select: { courseId: true },
+      }),
+      prisma.order.findMany({
+        where: { userId: session.user.id, status: "SUCCESS" },
+        select: { courseId: true },
+      }),
+    ]);
+
+    completedCount = completedAttempts;
+    enrolledCourseIds = Array.from(
+      new Set([
+        ...enrollments.map((e) => e.courseId),
+        ...successOrders.map((o) => o.courseId),
+      ])
+    );
 
     if (totalPublishedTests > 0) {
       progressPercentage = Math.min(
@@ -203,6 +222,7 @@ export default async function HomePage() {
       progressPercentage={progressPercentage}
       completedCount={completedCount}
       totalTestsCount={totalPublishedTests}
+      enrolledCourseIds={enrolledCourseIds}
       session={session}
     />
   );

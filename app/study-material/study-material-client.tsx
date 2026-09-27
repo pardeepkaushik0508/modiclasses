@@ -19,7 +19,7 @@ import {
 export interface SerializedStudyMaterial {
   id: string;
   title: string;
-  fileUrl: string;
+  fileUrl: string | null;
   fileType: string;
   isFree: boolean;
   createdAt: string;
@@ -250,7 +250,7 @@ export default function StudyMaterialClient({
                   </div>
 
                   {/* Real Download / Locked Button */}
-                  {isAccessible ? (
+                  {isAccessible && item.fileUrl ? (
                     <a
                       href={item.fileUrl}
                       download
@@ -263,11 +263,11 @@ export default function StudyMaterialClient({
                     </a>
                   ) : (
                     <Link
-                      href="/#pricing"
+                      href={`/checkout/${item.course.slug}`}
                       className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs shadow-xs transition-colors"
                     >
                       <Lock className="w-3.5 h-3.5 text-amber-700" />
-                      <span>Locked • Enroll to Access</span>
+                      <span>Locked • Enroll to Download</span>
                     </Link>
                   )}
                 </div>

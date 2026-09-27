@@ -22,7 +22,7 @@ import {
 export interface SerializedVideoLesson {
   id: string;
   title: string;
-  fileUrl: string;
+  fileUrl: string | null;
   isFree: boolean;
   createdAt: string;
   course: {
@@ -42,7 +42,7 @@ interface VideoClientProps {
 function parseVideoMeta(title: string) {
   let cleanTitle = title;
   let duration = "25 Mins";
-  let instructor = "Five Education RDSO Mentor";
+  let instructor = "PI EDUCATION RDSO Mentor";
   let batteryTag = "RDSO Battery";
 
   // Check battery type
@@ -72,7 +72,7 @@ function parseVideoMeta(title: string) {
 }
 
 // Convert various video URLs into responsive embed URLs
-function getEmbedUrl(url: string): { type: "embed" | "direct"; src: string } {
+function getEmbedUrl(url: string | null): { type: "embed" | "direct"; src: string } {
   if (!url) return { type: "embed", src: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" };
 
   // YouTube match
@@ -210,11 +210,10 @@ export default function VideoClient({
               <button
                 key={cat}
                 onClick={() => setBatteryFilter(cat)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                  isActive
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${isActive
                     ? "bg-[#003366] text-white shadow-xs"
                     : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -328,7 +327,7 @@ export default function VideoClient({
 
             {/* Video Player or Locked Barrier */}
             <div className="relative aspect-video w-full bg-black flex items-center justify-center">
-              {isSelectedVideoAccessible ? (
+              {isSelectedVideoAccessible && selectedVideo.fileUrl ? (
                 (() => {
                   const media = getEmbedUrl(selectedVideo.fileUrl);
                   if (media.type === "direct") {
@@ -358,17 +357,17 @@ export default function VideoClient({
                     <Lock className="w-8 h-8" />
                   </div>
                   <div className="space-y-1.5">
-                    <h4 className="text-lg font-bold text-white">Premium Video Lesson Locked</h4>
+                    <h4 className="text-lg font-bold text-white">Enroll in this course to watch this masterclass</h4>
                     <p className="text-xs text-slate-400">
                       This masterclass is part of <strong>{selectedVideo.course.title}</strong>. Enroll in the course to unlock all video modules, concept shortcuts, and practice drills.
                     </p>
                   </div>
                   <div className="pt-2 flex items-center justify-center gap-3">
                     <Link
-                      href="/#pricing"
+                      href={`/checkout/${selectedVideo.course.slug}`}
                       className="px-5 py-2.5 rounded-lg bg-[#0284c7] hover:bg-sky-600 text-white font-bold text-xs shadow-md transition-colors inline-flex items-center gap-2"
                     >
-                      <span>Enroll in Course</span>
+                      <span>Enroll Now</span>
                       <ChevronRight className="w-4 h-4" />
                     </Link>
                     <button

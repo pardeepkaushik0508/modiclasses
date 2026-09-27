@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log("==========================================================");
-  console.log("🛡️  [Five Education] Initial Admin User Setup");
+  console.log("🛡️  [PI EDUCATION] Initial Admin User Setup");
   console.log("==========================================================");
 
   const adminEmail = (process.env.ADMIN_EMAIL || "admin@fiveeducation.com").toLowerCase().trim();
   const adminPassword = process.env.ADMIN_PASSWORD || "AdminPassword123";
   const adminPhone = process.env.ADMIN_PHONE || "+919876543210";
-  const adminName = "Five Education Administrator";
+  const adminName = "PI EDUCATION Administrator";
 
   console.log(`👤 Target Admin Email: ${adminEmail}`);
   console.log("🔐 Hashing password with bcrypt (10 rounds)...");

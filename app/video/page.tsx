@@ -26,29 +26,44 @@ export default async function VideoClassesPage() {
     orderBy: { createdAt: "asc" },
   });
 
-  const videos: SerializedVideoLesson[] = videosRaw.map((v) => ({
-    id: v.id,
-    title: v.title,
-    fileUrl: v.fileUrl,
-    isFree: v.isFree,
-    createdAt: v.createdAt.toISOString(),
-    course: v.course,
-  }));
-
   // 2. Resolve Candidate Enrollment Access
   let enrolledCourseIds: string[] = [];
   const isAdmin = session?.user?.role === "ADMIN";
 
   if (session?.user?.id && !isAdmin) {
-    const orders = await prisma.order.findMany({
-      where: {
-        userId: session.user.id,
-        status: OrderStatus.SUCCESS,
-      },
-      select: { courseId: true },
-    });
-    enrolledCourseIds = orders.map((o) => o.courseId);
+    const [enrollments, orders] = await Promise.all([
+      prisma.enrollment.findMany({
+        where: { userId: session.user.id },
+        select: { courseId: true },
+      }),
+      prisma.order.findMany({
+        where: {
+          userId: session.user.id,
+          status: OrderStatus.SUCCESS,
+        },
+        select: { courseId: true },
+      }),
+    ]);
+    enrolledCourseIds = Array.from(
+      new Set([
+        ...enrollments.map((e) => e.courseId),
+        ...orders.map((o) => o.courseId),
+      ])
+    );
   }
+
+  // SECURITY: Only pass video fileUrl to client if user is authenticated and authorized (enrolled, admin, or free preview)
+  const videos: SerializedVideoLesson[] = videosRaw.map((v) => {
+    const isAccessible = v.isFree || isAdmin || enrolledCourseIds.includes(v.course.id);
+    return {
+      id: v.id,
+      title: v.title,
+      fileUrl: isAccessible ? v.fileUrl : null,
+      isFree: v.isFree,
+      createdAt: v.createdAt.toISOString(),
+      course: v.course,
+    };
+  });
 
   return (
     <VideoClient

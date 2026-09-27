@@ -95,7 +95,7 @@ async function runAudit() {
   const startTime = Date.now();
 
   console.log(`\n${BOLD}${BLUE}╔══════════════════════════════════════════════════════════════════════════════╗${RESET}`);
-  console.log(`${BOLD}${BLUE}║       FIVE EDUCATION LMS — PRINCIPAL QA DYNAMIC VERIFICATION SUITE         ║${RESET}`);
+  console.log(`${BOLD}${BLUE}║       PI EDUCATION LMS — PRINCIPAL QA DYNAMIC VERIFICATION SUITE         ║${RESET}`);
   console.log(`${BOLD}${BLUE}╚══════════════════════════════════════════════════════════════════════════════╝${RESET}\n`);
 
   // =========================================================================

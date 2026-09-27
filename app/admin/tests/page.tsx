@@ -5,7 +5,7 @@ import { Plus, FileQuestion, ExternalLink, ArrowUpRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "RDSO Psycho Tests | Admin Console - Five Education",
+  title: "RDSO Psycho Tests | Admin Console - PI EDUCATION",
   description: "Manage and preview RDSO CBT battery tests configured in the database.",
 };
 
@@ -98,11 +98,10 @@ export default async function AdminTestsDirectoryPage() {
 
                     <td className="py-4 px-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${
-                          t.isPublished
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${t.isPublished
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                             : "bg-slate-100 text-slate-600 border border-slate-200"
-                        }`}
+                          }`}
                       >
                         {t.isPublished ? "Live" : "Draft"}
                       </span>
@@ -110,7 +109,7 @@ export default async function AdminTestsDirectoryPage() {
 
                     <td className="py-4 px-4 text-right whitespace-nowrap">
                       <Link
-                        href={`/test/${t.slug || t.id}?trial=true`}
+                        href={`/test/${t.slug || t.id}`}
                         target="_blank"
                         className="p-1.5 rounded-lg bg-slate-100 hover:bg-sky-50 hover:text-[#003366] hover:border-sky-300 text-slate-600 transition-colors inline-block"
                         title="Launch CBT Preview"

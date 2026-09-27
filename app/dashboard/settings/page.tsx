@@ -60,7 +60,7 @@ export default function CandidateSettingsPage() {
               </div>
               <div>
                 <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-none">
-                  FIVE EDUCATION • SETTINGS
+                  PI EDUCATION • SETTINGS
                 </h1>
                 <p className="text-xs text-slate-600 font-medium mt-1">
                   Indian Railways RDSO Psycho Aptitude Exam Engine

@@ -2,8 +2,8 @@ import { prisma } from "@/lib/prisma";
 import StudentsClient from "./students-client";
 
 export const metadata = {
-  title: "Students Directory | Admin Console - Five Education",
-  description: "View registered students and candidates for Five Education LMS.",
+  title: "Students Directory | Admin Console - PI EDUCATION",
+  description: "View registered students and candidates for PI EDUCATION LMS.",
 };
 
 export default async function AdminStudentsPage() {

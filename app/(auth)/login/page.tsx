@@ -110,14 +110,14 @@ function LoginForm() {
 
   return (
     <div className="w-full max-w-md">
-      {/* Five Education Themed Card */}
+      {/* PI EDUCATION Themed Card */}
       <div className="bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden backdrop-blur-sm">
         {/* Header Ribbon */}
         <div className="bg-gradient-to-r from-[#0284c7] via-[#0369a1] to-[#0f172a] p-6 text-white text-center relative">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 mb-3 shadow-inner">
             <ShieldCheck className="w-6 h-6 text-sky-200" />
           </div>
-          <h2 className="text-xl font-bold tracking-tight">Five Education CBT Portal</h2>
+          <h2 className="text-xl font-bold tracking-tight">PI EDUCATION CBT Portal</h2>
           <p className="text-xs text-sky-100/90 mt-1">
             Indian Railways RDSO Psycho Test Candidate & Admin Login
           </p>
@@ -280,7 +280,7 @@ export default function LoginPage() {
       </Suspense>
 
       <footer className="mt-8 text-center text-xs text-slate-500 space-y-1">
-        <p>&copy; {new Date().getFullYear()} Five Education • RDSO Railway Psycho CBT Engine</p>
+        <p>&copy; {new Date().getFullYear()} PI EDUCATION • RDSO Railway Psycho CBT Engine</p>
         <p>RRB ALP, Station Master & Aptitude Battery Preparation</p>
       </footer>
     </div>

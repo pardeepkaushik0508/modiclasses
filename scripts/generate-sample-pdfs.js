@@ -5,8 +5,8 @@ const dir = path.join(process.cwd(), 'public', 'materials');
 if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
 function createPdf(filename, title, subtitle) {
-  const content = 
-`%PDF-1.4
+  const content =
+    `%PDF-1.4
 1 0 obj
 << /Type /Catalog /Pages 2 0 R >>
 endobj
@@ -22,7 +22,7 @@ stream
 BT
 /F1 18 Tf
 50 720 Td
-(FIVE EDUCATION - RDSO PSYCHO CBT PREPARATION) Tj
+(PI EDUCATION - RDSO PSYCHO CBT PREPARATION) Tj
 0 -36 Td
 /F1 13 Tf
 (${title}) Tj

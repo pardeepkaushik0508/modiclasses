@@ -4,7 +4,7 @@ import SettingsClient from "./settings-client";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Community & Group Settings | Admin Console - Five Education",
+  title: "Community & Group Settings | Admin Console - PI EDUCATION",
   description: "Configure dynamic mentorship, Telegram, and WhatsApp community links.",
 };
 
