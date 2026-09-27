@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+
 import {
   Home as HomeIcon,
   FileText,
@@ -118,9 +119,8 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
           1. STRICT FIXED LEFT SIDEBAR (Pinned, Never Scrolls Away)
          ======================================================== */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0b192e] text-slate-300 flex flex-col justify-between transition-transform duration-200 ease-in-out border-r border-slate-800/80 shadow-2xl lg:shadow-none lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#0b192e] text-slate-300 flex flex-col justify-between transition-transform duration-200 ease-in-out border-r border-slate-800/80 shadow-2xl lg:shadow-none lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Scrollable Sidebar Body */}
         <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
@@ -153,11 +153,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href="/"
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname === "/"
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname === "/"
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <HomeIcon className="w-4 h-4 shrink-0" />
               <span>Home</span>
@@ -166,11 +165,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href="/test/trial"
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname.startsWith("/test")
+              className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname.startsWith("/test")
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <div className="flex items-center gap-3.5">
                 <FileText className="w-4 h-4 shrink-0" />
@@ -184,11 +182,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href="/video"
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname.startsWith("/video")
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname.startsWith("/video")
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <Video className="w-4 h-4 shrink-0" />
               <span>Video Classes</span>
@@ -197,11 +194,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href="/study-material"
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname.startsWith("/study-material")
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname.startsWith("/study-material")
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <BookOpen className="w-4 h-4 shrink-0" />
               <span>Study Material</span>
@@ -210,11 +206,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href="/groups"
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname.startsWith("/groups")
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname.startsWith("/groups")
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <Users className="w-4 h-4 shrink-0" />
               <span>Community Groups</span>
@@ -271,11 +266,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href={isAuthenticated ? "/dashboard" : "/login?callbackUrl=/dashboard"}
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname === "/dashboard"
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname === "/dashboard"
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <GraduationCap className="w-4 h-4 shrink-0 text-slate-400" />
               <span>My Dashboard</span>
@@ -284,11 +278,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href={isAuthenticated ? "/dashboard/profile" : "/login?callbackUrl=/dashboard/profile"}
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname.startsWith("/dashboard/profile")
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname.startsWith("/dashboard/profile")
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <User className="w-4 h-4 shrink-0 text-slate-400" />
               <span>Profile</span>
@@ -297,11 +290,10 @@ export default function StudentAppLayout({ children }: StudentAppLayoutProps) {
             <Link
               href={isAuthenticated ? "/dashboard/settings" : "/login?callbackUrl=/dashboard/settings"}
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                pathname.startsWith("/dashboard/settings")
+              className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${pathname.startsWith("/dashboard/settings")
                   ? "bg-[#1d4ed8] text-white shadow-md font-bold"
                   : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+                }`}
             >
               <Settings className="w-4 h-4 shrink-0 text-slate-400" />
               <span>Settings</span>
